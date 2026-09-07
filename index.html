@@ -12,44 +12,80 @@
     <!-- Header / Navbar -->
     <header class="p-6 border-b border-slate-800 flex justify-between items-center">
         <h1 class="text-2xl font-bold tracking-wider text-indigo-400">DAKICKS PODCAST</h1>
-        <button onclick="openAuthModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-medium transition">
-            Sign In / Login
-        </button>
+        <div class="flex gap-4">
+            <button onclick="enterStudio()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg font-medium transition">
+                Enter Studio
+            </button>
+            <button onclick="openAuthModal()" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-medium transition border border-slate-700">
+                Sign In
+            </button>
+        </div>
     </header>
 
-    <!-- Main Hero Section -->
-    <main class="flex-1 flex flex-col items-center justify-center text-center p-6">
+    <!-- Main Hero Section (Home) -->
+    <main id="homeView" class="flex-1 flex flex-col items-center justify-center text-center p-6">
         <h2 class="text-4xl md:text-6xl font-extrabold mb-4 max-w-3xl">
             Next-Gen 4K Studio & Live Q&A Podcasting
         </h2>
         <p class="text-slate-400 text-lg mb-8 max-w-xl">
             Crystal clear AI noise cancellation, face-to-face simulation, and live audience interaction.
         </p>
-        <button onclick="openAuthModal()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-8 py-4 rounded-xl text-lg shadow-lg transition">
+        <button onclick="enterStudio()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-8 py-4 rounded-xl text-lg shadow-lg transition">
             Start Live Studio
         </button>
     </main>
 
-    <!-- Authentication Modal (Hidden by default) -->
+    <!-- Live Studio Room View (Hidden by default) -->
+    <main id="studioView" class="hidden flex-1 p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- Video Grid Section (3 Columns) -->
+        <div class="lg:col-span-3 flex flex-col gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
+                <!-- Host Video Box -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl relative flex items-center justify-center min-h-[300px]">
+                    <div class="absolute top-4 left-4 bg-black/60 px-3 py-1 rounded-md text-sm font-medium">Host (You)</div>
+                    <div class="text-slate-500 text-sm">Camera Connecting... (4K)</div>
+                </div>
+                <!-- Guest Video Box -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl relative flex items-center justify-center min-h-[300px]">
+                    <div class="absolute top-4 left-4 bg-black/60 px-3 py-1 rounded-md text-sm font-medium">Guest</div>
+                    <div class="text-slate-500 text-sm">Waiting for Guest...</div>
+                </div>
+            </div>
+
+            <!-- Studio Control Bar -->
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex justify-center items-center gap-4">
+                <button onclick="toggleAudio()" id="micBtn" class="bg-slate-800 hover:bg-slate-700 px-5 py-3 rounded-xl font-medium transition">Mute Mic</button>
+                <button onclick="toggleVideo()" id="camBtn" class="bg-slate-800 hover:bg-slate-700 px-5 py-3 rounded-xl font-medium transition">Stop Cam</button>
+                <button onclick="leaveStudio()" class="bg-rose-600 hover:bg-rose-500 px-6 py-3 rounded-xl font-bold transition">End Session</button>
+            </div>
+        </div>
+
+        <!-- Live Q&A Panel (1 Column) -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col h-[600px]">
+            <h3 class="font-bold text-lg mb-4 border-b border-slate-800 pb-2">Live Q&A Queue</h3>
+            <div id="questionsList" class="flex-1 overflow-y-auto space-y-3 pr-1">
+                <!-- Sample Question Item -->
+                <div class="bg-slate-800/60 p-3 rounded-xl border border-slate-700/50">
+                    <p class="text-sm text-slate-200 mb-2">"Aapka next major product launch kab hoga?"</p>
+                    <div class="flex gap-2">
+                        <button onclick="displayQuestion(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-xs py-1.5 rounded-lg font-semibold transition">Display</button>
+                        <button onclick="removeQuestion(this)" class="bg-slate-700 hover:bg-slate-600 text-xs py-1.5 rounded-lg text-slate-300 transition">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Authentication Modal -->
     <div id="authModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl max-w-md w-full text-center relative">
             <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl">&times;</button>
             <h3 class="text-2xl font-bold mb-2">Welcome to Dakicks</h3>
             <p class="text-slate-400 text-sm mb-6">Sign in to save your podcast recordings & UIDs</p>
-            
             <div class="space-y-3">
-                <!-- Google Login Button -->
-                <button onclick="handleLogin('Google')" class="w-full flex items-center justify-center gap-3 bg-white text-slate-900 font-semibold py-3 px-4 rounded-xl hover:bg-slate-100 transition">
-                    <span>Continue with Google</span>
-                </button>
-                <!-- Microsoft Login Button -->
-                <button onclick="handleLogin('Microsoft')" class="w-full flex items-center justify-center gap-3 bg-slate-800 text-white font-semibold py-3 px-4 rounded-xl border border-slate-700 hover:bg-slate-700 transition">
-                    <span>Continue with Microsoft</span>
-                </button>
-                <!-- Apple Login Button -->
-                <button onclick="handleLogin('Apple')" class="w-full flex items-center justify-center gap-3 bg-black text-white font-semibold py-3 px-4 rounded-xl border border-slate-700 hover:bg-slate-900 transition">
-                    <span>Continue with Apple</span>
-                </button>
+                <button onclick="handleLogin('Google')" class="w-full bg-white text-slate-900 font-semibold py-3 px-4 rounded-xl hover:bg-slate-100 transition">Continue with Google</button>
+                <button onclick="handleLogin('Microsoft')" class="w-full bg-slate-800 text-white font-semibold py-3 px-4 rounded-xl border border-slate-700 hover:bg-slate-700 transition">Continue with Microsoft</button>
+                <button onclick="handleLogin('Apple')" class="w-full bg-black text-white font-semibold py-3 px-4 rounded-xl border border-slate-700 hover:bg-slate-900 transition">Continue with Apple</button>
             </div>
         </div>
     </div>
@@ -59,8 +95,16 @@
         &copy; 2026 Dakicks. All rights reserved.
     </footer>
 
-    <!-- Basic JS for Modal Interaction -->
+    <!-- JS Logic for Studio & Navigation -->
     <script>
+        function enterStudio() {
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('studioView').classList.remove('hidden');
+        }
+        function leaveStudio() {
+            document.getElementById('studioView').classList.add('hidden');
+            document.getElementById('homeView').classList.remove('hidden');
+        }
         function openAuthModal() {
             document.getElementById('authModal').classList.remove('hidden');
         }
@@ -69,7 +113,12 @@
         }
         function handleLogin(provider) {
             alert('Connecting to ' + provider + ' Authentication...');
-            // Yahan backend Firebase/Auth0 integration aayegi
+        }
+        function displayQuestion(btn) {
+            alert('Question pushed to 3D Live Screen Overlay!');
+        }
+        function removeQuestion(btn) {
+            btn.closest('div.bg-slate-800\\/60').remove();
         }
     </script>
 </body>
