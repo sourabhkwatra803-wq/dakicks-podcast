@@ -35,16 +35,26 @@
         </button>
     </main>
 
-    <!-- Live Studio Room View (Hidden by default) -->
+    <!-- Live Studio Room View -->
     <main id="studioView" class="hidden flex-1 p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
         <!-- Video Grid Section (3 Columns) -->
         <div class="lg:col-span-3 flex flex-col gap-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
-                <!-- Host Video Box (Camera Live Feed) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 relative">
+                
+                <!-- Host Video Box (Camera Live Feed + Active 3D Question Overlay) -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl relative flex items-center justify-center min-h-[300px] overflow-hidden">
-                    <div class="absolute top-4 left-4 z-10 bg-black/60 px-3 py-1 rounded-md text-sm font-medium">Host (You)</div>
+                    <div class="absolute top-4 left-4 z-20 bg-black/60 px-3 py-1 rounded-md text-sm font-medium flex items-center gap-2">
+                        <span id="recIndicator" class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> Host (You)
+                    </div>
                     <video id="hostVideo" autoplay playsinline muted class="w-full h-full object-cover"></video>
+                    
+                    <!-- 3D Style Displayed Question Overlay -->
+                    <div id="activeOverlay" class="hidden absolute bottom-6 left-6 right-6 z-30 bg-gradient-to-r from-indigo-900/90 to-purple-900/90 border border-indigo-500/50 p-4 rounded-xl shadow-2xl backdrop-blur-md transform transition-all duration-300">
+                        <span class="text-xs uppercase tracking-widest text-indigo-300 font-bold">Live Question</span>
+                        <p id="overlayText" class="text-lg font-extrabold text-white mt-1"></p>
+                    </div>
                 </div>
+
                 <!-- Guest Video Box -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl relative flex items-center justify-center min-h-[300px]">
                     <div class="absolute top-4 left-4 bg-black/60 px-3 py-1 rounded-md text-sm font-medium">Guest</div>
@@ -53,10 +63,11 @@
             </div>
 
             <!-- Studio Control Bar -->
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex justify-center items-center gap-4">
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex flex-wrap justify-center items-center gap-4">
                 <button onclick="toggleAudio()" id="micBtn" class="bg-slate-800 hover:bg-slate-700 px-5 py-3 rounded-xl font-medium transition">Mute Mic</button>
                 <button onclick="toggleVideo()" id="camBtn" class="bg-slate-800 hover:bg-slate-700 px-5 py-3 rounded-xl font-medium transition">Stop Cam</button>
-                <button onclick="leaveStudio()" class="bg-rose-600 hover:bg-rose-500 px-6 py-3 rounded-xl font-bold transition">End Session</button>
+                <button onclick="toggleRecording()" id="recBtn" class="bg-emerald-600 hover:bg-emerald-500 px-5 py-3 rounded-xl font-bold transition">Start Recording</button>
+                <button onclick="leaveStudio()" class="bg-rose-600 hover:bg-rose-500 px-6 py-3 rounded-xl font-bold transition">End & Download</button>
             </div>
         </div>
 
@@ -66,6 +77,13 @@
             <div id="questionsList" class="flex-1 overflow-y-auto space-y-3 pr-1">
                 <div class="bg-slate-800/60 p-3 rounded-xl border border-slate-700/50">
                     <p class="text-sm text-slate-200 mb-2">"Aapka next major product launch kab hoga?"</p>
+                    <div class="flex gap-2">
+                        <button onclick="displayQuestion(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-xs py-1.5 rounded-lg font-semibold transition">Display</button>
+                        <button onclick="removeQuestion(this)" class="bg-slate-700 hover:bg-slate-600 text-xs py-1.5 rounded-lg text-slate-300 transition">Remove</button>
+                    </div>
+                </div>
+                <div class="bg-slate-800/60 p-3 rounded-xl border border-slate-700/50">
+                    <p class="text-sm text-slate-200 mb-2">"Daikicks sneakers ki global pricing kya hogi?"</p>
                     <div class="flex gap-2">
                         <button onclick="displayQuestion(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-xs py-1.5 rounded-lg font-semibold transition">Display</button>
                         <button onclick="removeQuestion(this)" class="bg-slate-700 hover:bg-slate-600 text-xs py-1.5 rounded-lg text-slate-300 transition">Remove</button>
@@ -97,6 +115,9 @@
     <!-- JavaScript Logic -->
     <script>
         let localStream = null;
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        let isRecording = false;
 
         async function enterStudio() {
             document.getElementById('homeView').classList.add('hidden');
@@ -109,7 +130,41 @@
             }
         }
 
+        function toggleRecording() {
+            if (!isRecording) {
+                recordedChunks = [];
+                mediaRecorder = new MediaRecorder(localStream, { mimeType: 'video/webm; codecs=vp9' });
+                mediaRecorder.ondataavailable = function(e) {
+                    if (e.data.size > 0) recordedChunks.push(e.data);
+                };
+                mediaRecorder.onstop = function() {
+                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'dakicks-podcast-session.webm';
+                    document.body.appendChild(a);
+                    a.click();
+                    alert('Podcast recording saved & downloaded successfully!');
+                };
+                mediaRecorder.start();
+                isRecording = true;
+                document.getElementById('recBtn').innerText = 'Stop Recording';
+                document.getElementById('recBtn').classList.replace('bg-emerald-600', 'bg-rose-600');
+                document.getElementById('recIndicator').classList.replace('bg-slate-500', 'bg-rose-500 animate-pulse');
+            } else {
+                mediaRecorder.stop();
+                isRecording = false;
+                document.getElementById('recBtn').innerText = 'Start Recording';
+                document.getElementById('recBtn').classList.replace('bg-rose-600', 'bg-emerald-600');
+                document.getElementById('recIndicator').classList.replace('bg-rose-500', 'bg-slate-500');
+            }
+        }
+
         function leaveStudio() {
+            if (isRecording && mediaRecorder) {
+                mediaRecorder.stop();
+            }
             if (localStream) {
                 localStream.getTracks().forEach(track => track.stop());
             }
@@ -133,6 +188,19 @@
             }
         }
 
+        function displayQuestion(btn) {
+            const questionText = btn.parentElement.previousElementSibling.innerText;
+            document.getElementById('overlayText').innerText = questionText;
+            document.getElementById('activeOverlay').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('activeOverlay').classList.add('hidden');
+            }, 6000); // Auto hide after 6 seconds
+        }
+
+        function removeQuestion(btn) {
+            btn.closest('div.bg-slate-800\\/60').remove();
+        }
+
         function openAuthModal() {
             document.getElementById('authModal').classList.remove('hidden');
         }
@@ -141,12 +209,6 @@
         }
         function handleLogin(provider) {
             alert('Connecting to ' + provider + ' Authentication...');
-        }
-        function displayQuestion(btn) {
-            alert('Question pushed to 3D Live Screen Overlay!');
-        }
-        function removeQuestion(btn) {
-            btn.closest('div.bg-slate-800\\/60').remove();
         }
     </script>
 </body>
