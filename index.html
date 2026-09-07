@@ -39,9 +39,19 @@
     <main id="studioView" class="hidden flex-1 p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
         <!-- Video Grid Section (3 Columns) -->
         <div class="lg:col-span-3 flex flex-col gap-4">
+            
+            <!-- Invite Link Bar -->
+            <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl flex items-center justify-between gap-4">
+                <div class="flex items-center gap-2 overflow-hidden">
+                    <span class="text-xs text-slate-400 whitespace-nowrap">Guest Link:</span>
+                    <input type="text" id="guestLinkInput" readonly class="bg-slate-950 border border-slate-800 text-xs text-slate-300 px-3 py-1.5 rounded-lg w-full max-w-xs truncate" value="Click generate to create invite link">
+                </div>
+                <button onclick="generateGuestLink()" class="bg-indigo-600 hover:bg-indigo-500 text-xs px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition">Generate Invite</button>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 relative">
                 
-                <!-- Host Video Box (Camera Live Feed + Active 3D Question Overlay) -->
+                <!-- Host Video Box -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl relative flex items-center justify-center min-h-[300px] overflow-hidden">
                     <div class="absolute top-4 left-4 z-20 bg-black/60 px-3 py-1 rounded-md text-sm font-medium flex items-center gap-2">
                         <span id="recIndicator" class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> Host (You)
@@ -55,10 +65,13 @@
                     </div>
                 </div>
 
-                <!-- Guest Video Box -->
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl relative flex items-center justify-center min-h-[300px]">
-                    <div class="absolute top-4 left-4 bg-black/60 px-3 py-1 rounded-md text-sm font-medium">Guest</div>
-                    <div class="text-slate-500 text-sm">Waiting for Guest link...</div>
+                <!-- Guest Video Box Simulator -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl relative flex items-center justify-center min-h-[300px] overflow-hidden">
+                    <div class="absolute top-4 left-4 z-20 bg-black/60 px-3 py-1 rounded-md text-sm font-medium">Guest</div>
+                    <div id="guestPlaceholder" class="text-slate-500 text-sm text-center p-4">
+                        Waiting for guest to join via invite link...
+                    </div>
+                    <video id="guestVideo" autoplay playsinline class="hidden w-full h-full object-cover"></video>
                 </div>
             </div>
 
@@ -71,7 +84,7 @@
             </div>
         </div>
 
-        <!-- Live Q&A Panel (1 Column) -->
+        <!-- Live Q&A Panel -->
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col h-[600px]">
             <h3 class="font-bold text-lg mb-4 border-b border-slate-800 pb-2">Live Q&A Queue</h3>
             <div id="questionsList" class="flex-1 overflow-y-auto space-y-3 pr-1">
@@ -130,6 +143,17 @@
             }
         }
 
+        function generateGuestLink() {
+            const randomRoomId = Math.random().toString(36.substring(2, 9));
+            const guestUrl = window.location.href.split('?')[0] + '?room=' + randomRoomId + '&role=guest';
+            document.getElementById('guestLinkInput').value = guestUrl;
+            
+            // Simulating guest joining for demo purposes after 3 seconds
+            setTimeout(() => {
+                document.getElementById('guestPlaceholder').innerHTML = '<span class="text-emerald-400 font-semibold">Guest Connected! (Simulated HD stream)</span>';
+            }, 3000);
+        }
+
         function toggleRecording() {
             if (!isRecording) {
                 recordedChunks = [];
@@ -145,7 +169,6 @@
                     a.download = 'dakicks-podcast-session.webm';
                     document.body.appendChild(a);
                     a.click();
-                    alert('Podcast recording saved & downloaded successfully!');
                 };
                 mediaRecorder.start();
                 isRecording = true;
@@ -194,7 +217,7 @@
             document.getElementById('activeOverlay').classList.remove('hidden');
             setTimeout(() => {
                 document.getElementById('activeOverlay').classList.add('hidden');
-            }, 6000); // Auto hide after 6 seconds
+            }, 6000);
         }
 
         function removeQuestion(btn) {
