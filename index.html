@@ -288,5 +288,366 @@
                             <i data-lucide="scissors" class="w-3.5 h-3.5"></i> Auto Clips
                         </button>
                     </div>
+                    <div id="aiStudioResult" class="hidden p-3 rounded-xl bg-black/50 border border-white/5 text-xs text-slate-300"></div>
+                </div>
 
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 3: RECORDINGS VAULT -->
+    <section id="page-vault" class="page-view hidden flex-1 p-6 max-w-6xl mx-auto w-full">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h2 class="text-2xl font-black text-white">Recordings Vault</h2>
+                <p class="text-xs text-slate-400">All local 4K session captures with instant export</p>
+            </div>
+            <button onclick="switchPage('studio')" class="bg-indigo-600 hover:bg-indigo-500 text-xs font-bold px-4 py-2 rounded-xl transition">
+                Start New Session
+            </button>
+        </div>
+
+        <div id="vaultList" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Default mock card -->
+            <div class="glass-panel p-4 rounded-2xl border border-white/5 flex flex-col gap-3">
+                <div class="w-full h-32 rounded-xl bg-slate-900 flex items-center justify-center border border-white/5 text-slate-600">
+                    <i data-lucide="film" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-slate-200">Sample-Master-4K.webm</h4>
+                    <p class="text-[11px] text-slate-500 font-mono">1080p / 60fps &bull; 42.8 MB</p>
+                </div>
+                <div class="flex gap-2 mt-auto">
+                    <button class="flex-1 glass-panel hover:bg-white/10 text-xs py-1.5 rounded-lg font-bold text-slate-300 transition" onclick="alert('Session loaded in player')">Play</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 4: ENTERPRISE PRICING -->
+    <section id="page-pricing" class="page-view hidden flex-1 p-6 max-w-5xl mx-auto w-full text-center py-12">
+        <h2 class="text-3xl md:text-5xl font-black text-white mb-3">Enterprise SaaS Tiers</h2>
+        <p class="text-slate-400 text-xs md:text-sm max-w-xl mx-auto mb-12">Uncapped lossless local 4K recording, automated guest bridging, and personalized branding.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+            <!-- Free -->
+            <div class="glass-panel p-6 rounded-3xl border border-white/5 flex flex-col justify-between">
+                <div>
+                    <h3 class="font-bold text-lg text-slate-200">Starter Creator</h3>
+                    <div class="text-3xl font-black text-white mt-4">$0 <span class="text-xs text-slate-400 font-normal">/ month</span></div>
+                    <ul class="text-xs space-y-2.5 text-slate-300 mt-6">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Up to 1080p recording</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Standard AI Noise Filter</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> 1 Guest stream</li>
+                    </ul>
+                </div>
+                <button onclick="openAuthModal()" class="w-full glass-panel hover:bg-white/10 text-xs font-bold py-3 rounded-xl transition mt-8">Get Started</button>
+            </div>
+
+            <!-- Pro -->
+            <div class="glass-panel p-6 rounded-3xl border-2 border-indigo-500/60 bg-gradient-to-b from-indigo-950/20 to-transparent flex flex-col justify-between relative">
+                <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">POPULAR</span>
+                <div>
+                    <h3 class="font-bold text-lg text-white">Studio Pro</h3>
+                    <div class="text-3xl font-black text-white mt-4">$49 <span class="text-xs text-slate-400 font-normal">/ month</span></div>
+                    <ul class="text-xs space-y-2.5 text-slate-300 mt-6">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-indigo-400"></i> True 4K 60FPS Lossless Buffer</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-indigo-400"></i> 3D Live Interactive Overlay</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-indigo-400"></i> Auto YouTube Thumbnail Engine</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-indigo-400"></i> Unlimited Guests</li>
+                    </ul>
+                </div>
+                <button onclick="openAuthModal()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold py-3 rounded-xl transition mt-8 shadow-lg shadow-indigo-600/30">Upgrade To Pro</button>
+            </div>
+
+            <!-- Enterprise -->
+            <div class="glass-panel p-6 rounded-3xl border border-white/5 flex flex-col justify-between">
+                <div>
+                    <h3 class="font-bold text-lg text-slate-200">White-Label Enterprise</h3>
+                    <div class="text-3xl font-black text-white mt-4">$199 <span class="text-xs text-slate-400 font-normal">/ month</span></div>
+                    <ul class="text-xs space-y-2.5 text-slate-300 mt-6">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-purple-400"></i> Custom Domain Integration</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-purple-400"></i> Direct AWS S3 / Cloud Bucket</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-purple-400"></i> Priority SFU Server Relay</li>
+                    </ul>
+                </div>
+                <button onclick="openAuthModal()" class="w-full glass-panel hover:bg-white/10 text-xs font-bold py-3 rounded-xl transition mt-8">Contact Sales</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- AUTH & SIGNUP MODAL (EMAILJS CONNECTED) -->
+    <div id="authModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
+        <div class="glass-panel bg-[#090b10] border border-white/10 p-6 md:p-8 rounded-3xl max-w-sm w-full text-center relative shadow-2xl">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">&times;</button>
+            
+            <div class="w-12 h-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center mx-auto mb-3">
+                <i data-lucide="mail-check" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-xl font-black text-white mb-1">DAKICKS Auth</h3>
+            <p class="text-xs text-slate-400 mb-5">Sign up via verified EmailJS integration</p>
+
+            <form id="emailAuthForm" onsubmit="handleEmailJsRegistration(event)" class="space-y-3 text-left">
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Your Name</label>
+                    <input type="text" id="authUserName" required placeholder="John Doe" class="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-indigo-500 mt-1">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Email Address</label>
+                    <input type="email" id="authUserEmail" required placeholder="name@company.com" class="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-indigo-500 mt-1">
+                </div>
+                <button type="submit" id="authSubmitBtn" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-95 text-white font-bold py-2.5 rounded-xl text-xs transition mt-2 flex items-center justify-center gap-2">
+                    <i data-lucide="send" class="w-3.5 h-3.5"></i> Register Account & Generate UID
+                </button>
+            </form>
+            <div id="authFeedback" class="text-[11px] mt-3 hidden"></div>
+        </div>
+    </div>
+
+    <!-- Hidden Thumbnail Rendering Canvas -->
+    <canvas id="hiddenExportCanvas" width="1280" height="720" class="hidden"></canvas>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/5 py-4 px-6 text-center text-xs text-slate-600 mt-auto">
+        DAKICKS Studio Pro &bull; Cloud 4K Media Stream Protocol &bull; All Rights Reserved 2026
+    </footer>
+
+    <!-- CORE LOGIC JAVASCRIPT -->
+    <script>
+        lucide.createIcons();
+
+        const EMAILJS_PUBLIC_KEY = "UZVvtLHuf8uZWHdkg";
+        const EMAILJS_SERVICE_ID = "service_91l0edt";
+        const EMAILJS_TEMPLATE_ID = "template_6a78v2d";
+
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        let mediaStream = null;
+        let mediaRecorder = null;
+        let recordingBlobs = [];
+        let isRecording = false;
+        let audioCtx = null;
+        let analyserNode = null;
+        let visualizerFrame = null;
+        let timerTicker = null;
+        let elapsedSeconds = 0;
+
+        function switchPage(pageKey) {
+            document.querySelectorAll('.page-view').forEach(p => p.classList.add('hidden'));
+            const target = document.getElementById(`page-${pageKey}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if (btn.dataset.target === pageKey) {
+                    btn.classList.add('bg-white/10', 'text-white');
+                } else {
+                    btn.classList.remove('bg-white/10', 'text-white');
+                }
+            });
+
+            if (pageKey === 'studio' && !mediaStream) {
+                initializeStudioHardware();
+            }
+        }
+
+        function openAuthModal() {
+            document.getElementById('authModal').classList.remove('hidden');
+        }
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+        }
+
+        function handleEmailJsRegistration(e) {
+            e.preventDefault();
+            const name = document.getElementById('authUserName').value;
+            const email = document.getElementById('authUserEmail').value;
+            const submitBtn = document.getElementById('authSubmitBtn');
+            const feedback = document.getElementById('authFeedback');
+
+            const generatedUid = "DK-UID-" + Math.floor(100000 + Math.random() * 900000);
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span>Connecting EmailJS...</span>`;
+
+            const templateParams = {
+                from_name: name,
+                user_email: email,
+                message: `New Dakicks Studio Creator registered: ${name} (${email}) with generated UID: ${generatedUid}`,
+                uid: generatedUid
+            };
+
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+                .then(function(response) {
+                    feedback.classList.remove('hidden', 'text-rose-400');
+                    feedback.classList.add('text-emerald-400');
+                    feedback.innerHTML = `UID Generated: <b>${generatedUid}</b>. Details sent to admin mail!`;
+                    
+                    document.getElementById('userStatusLabel').innerText = generatedUid;
+                    localStorage.setItem('dakicks_user_uid', generatedUid);
+                    localStorage.setItem('dakicks_user_name', name);
+
+                    setTimeout(() => {
+                        closeAuthModal();
+                    }, 2500);
+                }, function(error) {
+                    feedback.classList.remove('hidden', 'text-emerald-400');
+                    feedback.classList.add('text-amber-400');
+                    feedback.innerHTML = `Saved locally! Assigned UID: <b>${generatedUid}</b>`;
+                    document.getElementById('userStatusLabel').innerText = generatedUid;
+                    setTimeout(() => closeAuthModal(), 2500);
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = `<i data-lucide="send" class="w-3.5 h-3.5"></i> Register Account & Generate UID`;
+                    lucide.createIcons();
+                });
+        }
+
+        async function initializeStudioHardware() {
+            try {
+                mediaStream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: { ideal: 3840 }, height: { ideal: 2160 } },
+                    audio: { echoCancellation: true, noiseSuppression: true }
+                });
+                document.getElementById('hostLiveFeed').srcObject = mediaStream;
+                startVisualizer(mediaStream);
+            } catch (err) {
+                alert("Please grant Camera and Microphone access to use Dakicks Studio.");
+            }
+        }
+
+        function startVisualizer(stream) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const src = audioCtx.createMediaStreamSource(stream);
+            analyserNode = audioCtx.createAnalyser();
+            analyserNode.fftSize = 64;
+            src.connect(analyserNode);
+
+            const canvas = document.getElementById('waveformCanvas');
+            const ctx = canvas.getContext('2d');
+            const bufferLen = analyserNode.frequencyBinCount;
+            const dataArr = new Uint8Array(bufferLen);
+
+            function draw() {
+                visualizerFrame = requestAnimationFrame(draw);
+                analyserNode.getByteFrequencyData(dataArr);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const barWidth = (canvas.width / bufferLen) * 2;
+                let x = 0;
+                for (let i = 0; i < bufferLen; i++) {
+                    const barHeight = (dataArr[i] / 255) * canvas.height;
+                    ctx.fillStyle = 'rgba(99, 102, 241, 0.7)';
+                    ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+                    x += barWidth + 2;
+                }
+            }
+            draw();
+        }
+
+        function toggleAudioDevice() {
+            if (mediaStream) {
+                const track = mediaStream.getAudioTracks()[0];
+                track.enabled = !track.enabled;
+                const btn = document.getElementById('audioToggleBtn');
+                btn.innerHTML = track.enabled 
+                    ? '<i data-lucide="mic" class="w-4 h-4 text-emerald-400"></i> <span>Mute Mic</span>'
+                    : '<i data-lucide="mic-off" class="w-4 h-4 text-rose-400"></i> <span>Unmuted</span>';
+                lucide.createIcons();
+            }
+        }
+
+        function toggleVideoDevice() {
+            if (mediaStream) {
+                const track = mediaStream.getVideoTracks()[0];
+                track.enabled = !track.enabled;
+                const btn = document.getElementById('videoToggleBtn');
+                btn.innerHTML = track.enabled 
+                    ? '<i data-lucide="camera" class="w-4 h-4 text-emerald-400"></i> <span>Stop Cam</span>'
+                    : '<i data-lucide="camera-off" class="w-4 h-4 text-rose-400"></i> <span>Start Cam</span>';
+                lucide.createIcons();
+            }
+        }
+
+        function toggleNoiseSuppression() {
+            const btn = document.getElementById('noiseFilterBtn');
+            if (btn.innerText.includes('ON')) {
+                btn.innerHTML = '<i data-lucide="shield-alert" class="w-4 h-4"></i> AI Noise Gate: OFF';
+                btn.classList.replace('text-emerald-400', 'text-amber-400');
+            } else {
+                btn.innerHTML = '<i data-lucide="shield-check" class="w-4 h-4"></i> AI Noise Gate: ON';
+                btn.classList.replace('text-amber-400', 'text-emerald-400');
+            }
+            lucide.createIcons();
+        }
+
+        function toggleMasterRecording() {
+            const btn = document.getElementById('masterRecBtn');
+            const badge = document.getElementById('recordingBadge');
+
+            if (!isRecording) {
+                recordingBlobs = [];
+                try {
+                    mediaRecorder = new MediaRecorder(mediaStream, { mimeType: 'video/webm; codecs=vp9' });
+                } catch (e) {
+                    mediaRecorder = new MediaRecorder(mediaStream);
+                }
+
+                mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordingBlobs.push(e.data); };
+                mediaRecorder.onstop = saveAndDownloadRecording;
+                mediaRecorder.start(1000);
+
+                isRecording = true;
+                btn.innerHTML = '<i data-lucide="square" class="w-4 h-4 text-white"></i> <span>Stop 4K Recording</span>';
+                btn.className = "bg-rose-600 hover:bg-rose-500 text-white font-black text-xs px-6 py-3 rounded-xl shadow-lg shadow-rose-600/30 transition flex items-center gap-2";
+                badge.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span> 4K ON-AIR';
+                badge.classList.replace('text-slate-400', 'text-rose-400');
+
+                elapsedSeconds = 0;
+                timerTicker = setInterval(() => {
+                    elapsedSeconds++;
+                    const h = String(Math.floor(elapsedSeconds / 3600)).padStart(2, '0');
+                    const m = String(Math.floor((elapsedSeconds % 3600) / 60)).padStart(2, '0');
+                    const s = String(elapsedSeconds % 60).padStart(2, '0');
+                    document.getElementById('sessionTimer').innerText = `${h}:${m}:${s}`;
+                }, 1000);
+            } else {
+                mediaRecorder.stop();
+                isRecording = false;
+                btn.innerHTML = '<i data-lucide="disc" class="w-4 h-4"></i> <span>Start 4K Recording</span>';
+                btn.className = "bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-90 text-white font-black text-xs px-6 py-3 rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center gap-2";
+                badge.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> STANDBY';
+                badge.classList.replace('text-rose-400', 'text-slate-400');
+                clearInterval(timerTicker);
+            }
+            lucide.createIcons();
+        }
+
+        function saveAndDownloadRecording() {
+            const blob = new Blob(recordingBlobs, { type: 'video/webm' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `DAKICKS-STUDIO-4K-${Date.now()}.webm`;
+            document.body.appendChild(a);
+            a.click();
+            alert("Studio Master saved and downloaded to your device storage!");
+        }
+
+        function terminateStudioSession() {
+            if (isRecording) toggleMasterRecording();
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(t => t.stop());
+                mediaStream = null;
+            }
+            if (visualizerFrame) cancelAnimationFrame(visualizerFrame);
+            clearInterval(timerTicker);
+            switchPage('landing');
+        }
+
+        function copyGuestInvite() {
+            const guestRoomId = "dk-room-" + Math.random().toString(36).substring(2, 8);
+            const fullGuestUrl = window.location.href.split('?')[0] + "?room=" + guestRoomId + "&type=guest";
+            document.getElementById('guestUrlField').value = fullGuestUrl;
+            navigator.clipboard.writeText(fullGuestUrl);
+            alert("Guest invi
                 
