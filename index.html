@@ -3,236 +3,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dakicks Podcast Studio</title>
-    <!-- Tailwind CSS CDN -->
+    <title>DAKICKS Studio Pro | Ultimate 4K Cloud Podcasting</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 25px rgba(99, 102, 241, 0.4); }
+            50% { box-shadow: 0 0 45px rgba(168, 85, 247, 0.6); }
+        }
+        .luxury-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glow-active {
+            animation: pulse-glow 3s infinite;
+        }
+        /* Custom 3D Question Perspective */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-3d {
+            transform-style: preserve-3d;
+            transform: rotateX(8deg) translateZ(20px);
+        }
+    </style>
 </head>
-<body class="bg-slate-950 text-white font-sans min-h-screen flex flex-col justify-between">
+<body class="bg-[#07090e] text-slate-100 font-sans min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
 
-    <!-- Header / Navbar -->
-    <header class="p-6 border-b border-slate-800 flex justify-between items-center">
-        <h1 class="text-2xl font-bold tracking-wider text-indigo-400">DAKICKS PODCAST</h1>
-        <div class="flex gap-4">
-            <button onclick="enterStudio()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg font-medium transition">
-                Enter Studio
+    <!-- Top Navigation -->
+    <header class="sticky top-0 z-40 border-b border-white/5 luxury-card px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center font-black text-xl tracking-tighter shadow-lg shadow-indigo-500/20">
+                DK
+            </div>
+            <div>
+                <h1 class="text-lg font-black tracking-wider bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent leading-none">
+                    DAKICKS <span class="text-xs uppercase px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-400 font-bold ml-1 border border-indigo-500/30">PRO STUDIO</span>
+                </h1>
+                <p class="text-[11px] text-slate-500 font-medium tracking-wide">4K Lossless Real-time Engine</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button onclick="openAuthModal()" id="userAuthBtn" class="luxury-card hover:border-indigo-500/50 text-xs px-4 py-2 rounded-xl font-medium transition flex items-center gap-2">
+                <i data-lucide="user" class="w-4 h-4 text-indigo-400"></i>
+                <span id="authStatusText">Sign In</span>
             </button>
-            <button onclick="openAuthModal()" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-medium transition border border-slate-700">
-                Sign In
+            <button onclick="startInstantStudio()" class="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 hover:opacity-95 text-white text-xs px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-indigo-600/30 transition flex items-center gap-2">
+                <i data-lucide="radio" class="w-4 h-4 text-rose-300 animate-pulse"></i>
+                Launch Studio
             </button>
         </div>
     </header>
 
-    <!-- Main Hero Section (Home) -->
-    <main id="homeView" class="flex-1 flex flex-col items-center justify-center text-center p-6">
-        <h2 class="text-4xl md:text-6xl font-extrabold mb-4 max-w-3xl">
-            Next-Gen 4K Studio & Live Q&A Podcasting
+    <!-- LANDING VIEW -->
+    <main id="homeView" class="flex-1 flex flex-col items-center justify-center text-center px-4 py-12 relative overflow-hidden">
+        <div class="absolute inset-0 -z-10 flex items-center justify-center">
+            <div class="w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-3xl"></div>
+            <div class="w-[350px] h-[350px] bg-purple-600/10 rounded-full blur-3xl -translate-y-24"></div>
+        </div>
+
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-indigo-500/20 bg-indigo-500/10 text-indigo-300 text-xs font-semibold mb-6">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-400"></i> AI Powered Crystal Noise Gate Enabled
+        </div>
+
+        <h2 class="text-4xl md:text-7xl font-black tracking-tight max-w-4xl text-white mb-6 leading-tight">
+            Next-Gen Podcast Engine. <br>
+            <span class="bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">Zero Lag. Ultra Luxury.</span>
         </h2>
-        <p class="text-slate-400 text-lg mb-8 max-w-xl">
-            Crystal clear AI noise cancellation, face-to-face simulation, and live audience interaction.
+
+        <p class="text-slate-400 text-base md:text-lg max-w-2xl mb-10 leading-relaxed">
+            Direct high-definition browser-to-cloud recording, automated 3D broadcast overlays, real-time noise cancellation, and instant AI clipping—built for enterprise podcast creators.
         </p>
-        <button onclick="enterStudio()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-8 py-4 rounded-xl text-lg shadow-lg transition">
-            Start Live Studio
-        </button>
+
+        <div class="flex flex-wrap items-center justify-center gap-4">
+            <button onclick="startInstantStudio()" class="bg-white hover:bg-slate-100 text-slate-950 font-extrabold text-sm px-8 py-4 rounded-2xl shadow-xl shadow-white/5 transition flex items-center gap-2">
+                <i data-lucide="video" class="w-5 h-5"></i>
+                Enter 4K Live Studio
+            </button>
+            <button onclick="openAuthModal()" class="luxury-card hover:bg-white/5 text-slate-200 font-bold text-sm px-8 py-4 rounded-2xl transition">
+                Create Account
+            </button>
+        </div>
+
+        <!-- Metric badges -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl w-full mt-16 text-left">
+            <div class="luxury-card p-5 rounded-2xl">
+                <div class="text-2xl font-black text-indigo-400">6 Hours</div>
+                <div class="text-xs text-slate-400 mt-1 font-medium">Continuous Lossless Record Buffer</div>
+            </div>
+            <div class="luxury-card p-5 rounded-2xl">
+                <div class="text-2xl font-black text-purple-400">AI Crisp</div>
+                <div class="text-xs text-slate-400 mt-1 font-medium">Automatic Room Echo & Hum Filter</div>
+            </div>
+            <div class="luxury-card p-5 rounded-2xl">
+                <div class="text-2xl font-black text-pink-400">3D HUD</div>
+                <div class="text-xs text-slate-400 mt-1 font-medium">Audience Question Projection</div>
+            </div>
+            <div class="luxury-card p-5 rounded-2xl">
+                <div class="text-2xl font-black text-emerald-400">Zero Logo</div>
+                <div class="text-xs text-slate-400 mt-1 font-medium">100% White-label Studio Export</div>
+            </div>
+        </div>
     </main>
 
-    <!-- Live Studio Room View -->
-    <main id="studioView" class="hidden flex-1 p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <!-- Video Grid Section (3 Columns) -->
-        <div class="lg:col-span-3 flex flex-col gap-4">
+    <!-- PRO STUDIO VIEW (Hidden by default) -->
+    <main id="studioView" class="hidden flex-1 p-4 md:p-6 grid grid-cols-1 xl:grid-cols-4 gap-6 max-w-7xl mx-auto w-full">
+        
+        <!-- Left: Stage Area (3 cols) -->
+        <div class="xl:col-span-3 flex flex-col gap-4">
             
-            <!-- Invite Link Bar -->
-            <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl flex items-center justify-between gap-4">
-                <div class="flex items-center gap-2 overflow-hidden">
-                    <span class="text-xs text-slate-400 whitespace-nowrap">Guest Link:</span>
-                    <input type="text" id="guestLinkInput" readonly class="bg-slate-950 border border-slate-800 text-xs text-slate-300 px-3 py-1.5 rounded-lg w-full max-w-xs truncate" value="Click generate to create invite link">
+            <!-- Control Header -->
+            <div class="luxury-card p-3 rounded-2xl flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <span id="studioRecIndicator" class="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800/80 text-slate-400 border border-white/5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> STANDBY
+                    </span>
+                    <span id="recTimer" class="text-xs font-mono font-bold text-slate-400">00:00:00</span>
                 </div>
-                <button onclick="generateGuestLink()" class="bg-indigo-600 hover:bg-indigo-500 text-xs px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition">Generate Invite</button>
+
+                <div class="flex items-center gap-2 flex-1 max-w-sm">
+                    <input type="text" id="guestLinkInput" readonly class="bg-black/50 border border-white/10 text-xs px-3 py-2 rounded-xl text-slate-400 w-full truncate font-mono" value="Generate unique link for guest">
+                    <button onclick="generateGuestInvite()" class="luxury-card hover:bg-white/10 text-xs px-3 py-2 rounded-xl font-bold whitespace-nowrap text-indigo-300 transition">
+                        Copy Invite
+                    </button>
+                </div>
+
+                <button onclick="toggleAiNoiseGate()" id="noiseGateBtn" class="luxury-card hover:border-emerald-500/40 text-xs px-3 py-2 rounded-xl text-emerald-400 font-bold flex items-center gap-1.5 transition">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i> AI Noise: ON
+                </button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 relative">
+            <!-- Video Tiles Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-[420px] relative perspective-1000">
                 
-                <!-- Host Video Box -->
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl relative flex items-center justify-center min-h-[300px] overflow-hidden">
-                    <div class="absolute top-4 left-4 z-20 bg-black/60 px-3 py-1 rounded-md text-sm font-medium flex items-center gap-2">
-                        <span id="recIndicator" class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> Host (You)
+                <!-- Host Video Tile -->
+                <div class="luxury-card rounded-2xl relative overflow-hidden flex items-center justify-center border border-white/10 glow-active bg-black">
+                    <div class="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-xs font-semibold">
+                        <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Host (You)
                     </div>
+
                     <video id="hostVideo" autoplay playsinline muted class="w-full h-full object-cover"></video>
-                    
-                    <!-- 3D Style Displayed Question Overlay -->
-                    <div id="activeOverlay" class="hidden absolute bottom-6 left-6 right-6 z-30 bg-gradient-to-r from-indigo-900/90 to-purple-900/90 border border-indigo-500/50 p-4 rounded-xl shadow-2xl backdrop-blur-md transform transition-all duration-300">
-                        <span class="text-xs uppercase tracking-widest text-indigo-300 font-bold">Live Question</span>
-                        <p id="overlayText" class="text-lg font-extrabold text-white mt-1"></p>
+
+                    <!-- Realtime Audio Waveform Visualizer -->
+                    <canvas id="audioVisualizer" class="absolute bottom-2 left-2 right-2 h-10 z-20 pointer-events-none opacity-80"></canvas>
+
+                    <!-- 3D Luxury Live Question Overlay -->
+                    <div id="liveQuestionOverlay" class="hidden absolute bottom-6 left-6 right-6 z-30 transform-3d transition-all duration-500">
+                        <div class="bg-gradient-to-r from-slate-900/95 via-indigo-950/90 to-purple-950/95 border-2 border-indigo-500/50 p-5 rounded-2xl shadow-2xl backdrop-blur-xl">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[10px] uppercase tracking-widest text-indigo-400 font-extrabold flex items-center gap-1">
+                                    <i data-lucide="help-circle" class="w-3 h-3"></i> Screen Displayed Question
+                                </span>
+                                <button onclick="hideCurrentOverlay()" class="text-slate-400 hover:text-white text-xs">&times;</button>
+                            </div>
+                            <p id="overlayQuestionBody" class="text-base md:text-lg font-black text-white leading-snug drop-shadow"></p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Guest Video Box Simulator -->
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl relative flex items-center justify-center min-h-[300px] overflow-hidden">
-                    <div class="absolute top-4 left-4 z-20 bg-black/60 px-3 py-1 rounded-md text-sm font-medium">Guest</div>
-                    <div id="guestPlaceholder" class="text-slate-500 text-sm text-center p-4">
-                        Waiting for guest to join via invite link...
+                <!-- Guest Video Tile -->
+                <div class="luxury-card rounded-2xl relative overflow-hidden flex flex-col items-center justify-center border border-white/10 bg-black/40">
+                    <div class="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-xs font-semibold">
+                        <span class="w-2 h-2 rounded-full bg-slate-500"></span> Guest
                     </div>
-                    <video id="guestVideo" autoplay playsinline class="hidden w-full h-full object-cover"></video>
+
+                    <div id="guestEmptyState" class="text-center p-6 flex flex-col items-center gap-3">
+                        <div class="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-500">
+                            <i data-lucide="user-plus" class="w-6 h-6"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-slate-300">Awaiting Guest Connection</p>
+                        <p class="text-xs text-slate-500 max-w-xs">Share your guest link. The guest stream renders in 4K resolution automatically.</p>
+                    </div>
+
+                    <div id="guestMockStream" class="hidden w-full h-full relative items-center justify-center bg-slate-900">
+                        <div class="w-24 h-24 rounded-full bg-indigo-600/30 border border-indigo-500/50 flex items-center justify-center font-black text-2xl text-indigo-200">
+                            GUEST
+                        </div>
+                        <div class="absolute bottom-4 left-4 text-xs font-mono text-emerald-400 bg-black/70 px-2 py-1 rounded">
+                            4K SFU Connected (Simulated)
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Studio Control Bar -->
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex flex-wrap justify-center items-center gap-4">
-                <button onclick="toggleAudio()" id="micBtn" class="bg-slate-800 hover:bg-slate-700 px-5 py-3 rounded-xl font-medium transition">Mute Mic</button>
-                <button onclick="toggleVideo()" id="camBtn" class="bg-slate-800 hover:bg-slate-700 px-5 py-3 rounded-xl font-medium transition">Stop Cam</button>
-                <button onclick="toggleRecording()" id="recBtn" class="bg-emerald-600 hover:bg-emerald-500 px-5 py-3 rounded-xl font-bold transition">Start Recording</button>
-                <button onclick="leaveStudio()" class="bg-rose-600 hover:bg-rose-500 px-6 py-3 rounded-xl font-bold transition">End & Download</button>
+            <!-- Studio Action Bar -->
+            <div class="luxury-card p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleAudio()" id="micBtn" class="luxury-card hover:bg-white/10 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                        <i data-lucide="mic" class="w-4 h-4 text-emerald-400"></i> <span>Mute</span>
+                    </button>
+                    <button onclick="toggleVideo()" id="camBtn" class="luxury-card hover:bg-white/10 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                        <i data-lucide="camera" class="w-4 h-4 text-emerald-400"></i> <span>Stop Cam</span>
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleStudioRecord()" id="recMasterBtn" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-90 text-white font-black text-xs px-6 py-3 rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center gap-2">
+                        <i data-lucide="circle-dot" class="w-4 h-4 text-white"></i> <span>Start 4K Recording</span>
+                    </button>
+                    <button onclick="exitStudioMode()" class="bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/30 text-rose-300 font-bold text-xs px-4 py-3 rounded-xl transition flex items-center gap-2">
+                        <i data-lucide="phone-off" class="w-4 h-4"></i> End
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- Live Q&A Panel -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col h-[600px]">
-            <h3 class="font-bold text-lg mb-4 border-b border-slate-800 pb-2">Live Q&A Queue</h3>
-            <div id="questionsList" class="flex-1 overflow-y-auto space-y-3 pr-1">
-                <div class="bg-slate-800/60 p-3 rounded-xl border border-slate-700/50">
-                    <p class="text-sm text-slate-200 mb-2">"Aapka next major product launch kab hoga?"</p>
-                    <div class="flex gap-2">
-                        <button onclick="displayQuestion(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-xs py-1.5 rounded-lg font-semibold transition">Display</button>
-                        <button onclick="removeQuestion(this)" class="bg-slate-700 hover:bg-slate-600 text-xs py-1.5 rounded-lg text-slate-300 transition">Remove</button>
+        <!-- Right: Real-time Q&A Queue & AI Post-Production Panel (1 col) -->
+        <div class="flex flex-col gap-4">
+            
+            <!-- Live Question Queue -->
+            <div class="luxury-card p-4 rounded-2xl flex flex-col h-[380px]">
+                <div class="flex items-center justify-between pb-3 border-b border-white/5 mb-3">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="message-square" class="w-4 h-4 text-indigo-400"></i>
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Live Q&A Queue</h3>
                     </div>
+                    <span id="questionCount" class="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full font-bold">3 New</span>
                 </div>
-                <div class="bg-slate-800/60 p-3 rounded-xl border border-slate-700/50">
-                    <p class="text-sm text-slate-200 mb-2">"Daikicks sneakers ki global pricing kya hogi?"</p>
-                    <div class="flex gap-2">
-                        <button onclick="displayQuestion(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-xs py-1.5 rounded-lg font-semibold transition">Display</button>
-                        <button onclick="removeQuestion(this)" class="bg-slate-700 hover:bg-slate-600 text-xs py-1.5 rounded-lg text-slate-300 transition">Remove</button>
+
+                <!-- Add quick question -->
+                <div class="flex gap-2 mb-3">
+                    <input type="text" id="manualQuestionInput" placeholder="Add custom question..." class="bg-black/40 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-slate-200 flex-1 outline-none focus:border-indigo-500">
+                    <button onclick="addCustomQuestion()" class="bg-indigo-600 hover:bg-indigo-500 text-xs px-3 py-1.5 rounded-xl font-bold transition">+</button>
+                </div>
+
+                <!-- Questions List (Scrollable) -->
+                <div id="questionsContainer" class="flex-1 overflow-y-auto space-y-2 pr-1">
+                    <!-- Default Questions -->
+                    <div class="luxury-card p-3 rounded-xl border border-white/5 flex flex-col gap-2">
+                        <p class="text-xs font-medium text-slate-200 leading-snug">"Aapka next major sneaker line drop kab plan hai?"</p>
+                        <div class="flex gap-2">
+                            <button onclick="trigger3DOverlay(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-[11px] py-1 rounded-lg font-bold transition">Display 3D</button>
+                            <button onclick="removeQuestionItem(this)" class="luxury-card hover:bg-rose-500/20 text-[11px] px-2.5 py-1 rounded-lg text-slate-400 hover:text-rose-300 transition">Remove</button>
+                        </div>
+                    </div>
+                    <div class="luxury-card p-3 rounded-xl border border-white/5 flex flex-col gap-2">
+                        <p class="text-xs font-medium text-slate-200 leading-snug">"Sneaker manufacturing mein polyurethane vs rubber sole ka cost difference kya hai?"</p>
+                        <div class="flex gap-2">
+                            <button onclick="trigger3DOverlay(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-[11px] py-1 rounded-lg font-bold transition">Display 3D</button>
+                            <button onclick="removeQuestionItem(this)" class="luxury-card hover:bg-rose-500/20 text-[11px] px-2.5 py-1 rounded-lg text-slate-400 hover:text-rose-300 transition">Remove</button>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- AI Clip & Auto-Thumbnail Generator -->
+            <div class="luxury-card p-4 rounded-2xl flex flex-col gap-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-white/5">
+                    <i data-lucide="wand-2" class="w-4 h-4 text-purple-400"></i>
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">AI Post Studio</h3>
+                </div>
+
+                <p class="text-[11px] text-slate-400">Generate viral 3D clips & YouTube thumbnails directly from this recording session.</p>
+
+                <div class="flex gap-2">
+                    <button onclick="generateAutoThumbnail()" class="flex-1 luxury-card hover:border-purple-500/40 text-xs py-2.5 rounded-xl font-bold text-purple-300 transition flex items-center justify-center gap-1.5">
+                        <i data-lucide="image" class="w-3.5 h-3.5"></i> Auto Thumbnail
+                    </button>
+                    <button onclick="generateViralClips()" class="flex-1 luxury-card hover:border-pink-500/40 text-xs py-2.5 rounded-xl font-bold text-pink-300 transition flex items-center justify-center gap-1.5">
+                        <i data-lucide="film" class="w-3.5 h-3.5"></i> Cut Clips
+                    </button>
+                </div>
+
+                <div id="aiStudioOutput" class="hidden p-3 rounded-xl bg-black/40 border border-white/5 text-[11px] text-slate-300">
+                    <!-- Dynamic preview rendered here -->
+                </div>
+            </div>
+
         </div>
     </main>
 
-    <!-- Authentication Modal -->
-    <div id="authModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-        <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl max-w-md w-full text-center relative">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl">&times;</button>
-            <h3 class="text-2xl font-bold mb-2">Welcome to Dakicks</h3>
-            <p class="text-slate-400 text-sm mb-6">Sign in to save your podcast recordings & UIDs</p>
-            <div class="space-y-3">
-                <button onclick="handleLogin('Google')" class="w-full bg-white text-slate-900 font-semibold py-3 px-4 rounded-xl hover:bg-slate-100 transition">Continue with Google</button>
-                <button onclick="handleLogin('Microsoft')" class="w-full bg-slate-800 text-white font-semibold py-3 px-4 rounded-xl border border-slate-700 hover:bg-slate-700 transition">Continue with Microsoft</button>
-                <button onclick="handleLogin('Apple')" class="w-full bg-black text-white font-semibold py-3 px-4 rounded-xl border border-slate-700 hover:bg-slate-900 transition">Continue with Apple</button>
+    <!-- AUTHENTICATION MODAL -->
+    <div id="authModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
+        <div class="luxury-card bg-[#0b0e14] border border-white/10 p-6 md:p-8 rounded-3xl max-w-sm w-full text-center relative shadow-2xl">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">&times;</button>
+            <div class="w-12 h-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="shield" class="w-6 h-6"></i>
             </div>
-        </div>
-    </div>
+            <h3 class="text-xl font-black text-white mb-1">DAKICKS Cloud</h3>
+            <p class="text-xs text-slate-400 mb-6">Sign in to save unique UID & cloud recordings</p>
 
-    <!-- Footer -->
-    <footer class="p-4 text-center text-slate-600 text-sm border-t border-slate-900">
-        &copy; 2026 Dakicks. All rights reserved.
-    </footer>
-
-    <!-- JavaScript Logic -->
-    <script>
-        let localStream = null;
-        let mediaRecorder = null;
-        let recordedChunks = [];
-        let isRecording = false;
-
-        async function enterStudio() {
-            document.getElementById('homeView').classList.add('hidden');
-            document.getElementById('studioView').classList.remove('hidden');
-            try {
-                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                document.getElementById('hostVideo').srcObject = localStream;
-            } catch (err) {
-                alert('Camera/Mic permission allow karni padegi studio start karne ke liye.');
-            }
-        }
-
-        function generateGuestLink() {
-            const randomRoomId = Math.random().toString(36.substring(2, 9));
-            const guestUrl = window.location.href.split('?')[0] + '?room=' + randomRoomId + '&role=guest';
-            document.getElementById('guestLinkInput').value = guestUrl;
-            
-            // Simulating guest joining for demo purposes after 3 seconds
-            setTimeout(() => {
-                document.getElementById('guestPlaceholder').innerHTML = '<span class="text-emerald-400 font-semibold">Guest Connected! (Simulated HD stream)</span>';
-            }, 3000);
-        }
-
-        function toggleRecording() {
-            if (!isRecording) {
-                recordedChunks = [];
-                mediaRecorder = new MediaRecorder(localStream, { mimeType: 'video/webm; codecs=vp9' });
-                mediaRecorder.ondataavailable = function(e) {
-                    if (e.data.size > 0) recordedChunks.push(e.data);
-                };
-                mediaRecorder.onstop = function() {
-                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'dakicks-podcast-session.webm';
-                    document.body.appendChild(a);
-                    a.click();
-                };
-                mediaRecorder.start();
-                isRecording = true;
-                document.getElementById('recBtn').innerText = 'Stop Recording';
-                document.getElementById('recBtn').classList.replace('bg-emerald-600', 'bg-rose-600');
-                document.getElementById('recIndicator').classList.replace('bg-slate-500', 'bg-rose-500 animate-pulse');
-            } else {
-                mediaRecorder.stop();
-                isRecording = false;
-                document.getElementById('recBtn').innerText = 'Start Recording';
-                document.getElementById('recBtn').classList.replace('bg-rose-600', 'bg-emerald-600');
-                document.getElementById('recIndicator').classList.replace('bg-rose-500', 'bg-slate-500');
-            }
-        }
-
-        function leaveStudio() {
-            if (isRecording && mediaRecorder) {
-                mediaRecorder.stop();
-            }
-            if (localStream) {
-                localStream.getTracks().forEach(track => track.stop());
-            }
-            document.getElementById('studioView').classList.add('hidden');
-            document.getElementById('homeView').classList.remove('hidden');
-        }
-
-        function toggleAudio() {
-            if (localStream) {
-                const audioTrack = localStream.getAudioTracks()[0];
-                audioTrack.enabled = !audioTrack.enabled;
-                document.getElementById('micBtn').innerText = audioTrack.enabled ? 'Mute Mic' : 'Unmute Mic';
-            }
-        }
-
-        function toggleVideo() {
-            if (localStream) {
-                const videoTrack = localStream.getVideoTracks()[0];
-                videoTrack.enabled = !videoTrack.enabled;
-                document.getElementById('camBtn').innerText = videoTrack.enabled ? 'Stop Cam' : 'Start Cam';
-            }
-        }
-
-        function displayQuestion(btn) {
-            const questionText = btn.parentElement.previousElementSibling.innerText;
-            document.getElementById('overlayText').innerText = questionText;
-            document.getElementById('activeOverlay').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('activeOverlay').classList.add('hidden');
-            }, 6000);
-        }
-
-        function removeQuestion(btn) {
-            btn.closest('div.bg-slate-800\\/60').remove();
-        }
-
-        function openAuthModal() {
-            document.getElementById('authModal').classList.remove('hidden');
-        }
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.add('hidden');
-        }
-        function handleLogin(provider) {
-            alert('Connecting to ' + provider + ' Authentication...');
-        }
-    </script>
-</body>
-</html>
+            <div class="space-y-3">
+                <button onclick="loginUser('Google')" class="w-full bg-white hover:bg-slate-100 text-slate-900 font-bold py-3 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2">
+                    <i data-lucide="globe" class="w-4 h-4"></i> Continue with Google
+                </button>
+                <button onclick="loginUser('Microsoft')" class="w-full luxury-card hover:bg-white/5 text-white font-bold py-3 px-4 rounded-xl text-xs border border-white/10 transition flex items-center justify-center gap-2">
+                    <i data-lucide="layout" class="w-4 h-4"></i> Continue with Microsoft
+                </button>
+                <button onclick="loginUser('Apple')" class="w-full bg-black hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-
