@@ -40,15 +40,15 @@
         <!-- Video Grid Section (3 Columns) -->
         <div class="lg:col-span-3 flex flex-col gap-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
-                <!-- Host Video Box -->
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl relative flex items-center justify-center min-h-[300px]">
-                    <div class="absolute top-4 left-4 bg-black/60 px-3 py-1 rounded-md text-sm font-medium">Host (You)</div>
-                    <div class="text-slate-500 text-sm">Camera Connecting... (4K)</div>
+                <!-- Host Video Box (Camera Live Feed) -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl relative flex items-center justify-center min-h-[300px] overflow-hidden">
+                    <div class="absolute top-4 left-4 z-10 bg-black/60 px-3 py-1 rounded-md text-sm font-medium">Host (You)</div>
+                    <video id="hostVideo" autoplay playsinline muted class="w-full h-full object-cover"></video>
                 </div>
                 <!-- Guest Video Box -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl relative flex items-center justify-center min-h-[300px]">
                     <div class="absolute top-4 left-4 bg-black/60 px-3 py-1 rounded-md text-sm font-medium">Guest</div>
-                    <div class="text-slate-500 text-sm">Waiting for Guest...</div>
+                    <div class="text-slate-500 text-sm">Waiting for Guest link...</div>
                 </div>
             </div>
 
@@ -64,7 +64,6 @@
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col h-[600px]">
             <h3 class="font-bold text-lg mb-4 border-b border-slate-800 pb-2">Live Q&A Queue</h3>
             <div id="questionsList" class="flex-1 overflow-y-auto space-y-3 pr-1">
-                <!-- Sample Question Item -->
                 <div class="bg-slate-800/60 p-3 rounded-xl border border-slate-700/50">
                     <p class="text-sm text-slate-200 mb-2">"Aapka next major product launch kab hoga?"</p>
                     <div class="flex gap-2">
@@ -95,16 +94,45 @@
         &copy; 2026 Dakicks. All rights reserved.
     </footer>
 
-    <!-- JS Logic for Studio & Navigation -->
+    <!-- JavaScript Logic -->
     <script>
-        function enterStudio() {
+        let localStream = null;
+
+        async function enterStudio() {
             document.getElementById('homeView').classList.add('hidden');
             document.getElementById('studioView').classList.remove('hidden');
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                document.getElementById('hostVideo').srcObject = localStream;
+            } catch (err) {
+                alert('Camera/Mic permission allow karni padegi studio start karne ke liye.');
+            }
         }
+
         function leaveStudio() {
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+            }
             document.getElementById('studioView').classList.add('hidden');
             document.getElementById('homeView').classList.remove('hidden');
         }
+
+        function toggleAudio() {
+            if (localStream) {
+                const audioTrack = localStream.getAudioTracks()[0];
+                audioTrack.enabled = !audioTrack.enabled;
+                document.getElementById('micBtn').innerText = audioTrack.enabled ? 'Mute Mic' : 'Unmute Mic';
+            }
+        }
+
+        function toggleVideo() {
+            if (localStream) {
+                const videoTrack = localStream.getVideoTracks()[0];
+                videoTrack.enabled = !videoTrack.enabled;
+                document.getElementById('camBtn').innerText = videoTrack.enabled ? 'Stop Cam' : 'Start Cam';
+            }
+        }
+
         function openAuthModal() {
             document.getElementById('authModal').classList.remove('hidden');
         }
