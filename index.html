@@ -3,139 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DAKICKS PRO | Next-Gen Cloud 4K Podcast Platform</title>
+    <title>DAKICKS CLOUD | Broadcast Studio & Monetized Podcast Network</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#eef2ff',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            900: '#312e81',
-                            950: '#07090e'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        .glass-panel {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
-            backdrop-filter: blur(20px);
+        .luxury-glass {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(25px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .perspective-1000 {
-            perspective: 1000px;
+        .luxury-glass-active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.4);
         }
-        .transform-hud {
-            transform: rotateX(6deg) translateZ(15px);
-        }
+        .perspective-1000 { perspective: 1000px; }
+        .transform-hud { transform: rotateX(6deg) translateZ(20px); }
+        /* Smooth Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #07090e; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
     </style>
 </head>
-<body class="bg-brand-950 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white antialiased">
+<body class="bg-[#05070B] text-slate-100 font-sans min-h-screen flex flex-col selection:bg-indigo-600 selection:text-white antialiased">
 
-    <!-- TOP NAVIGATION BAR -->
-    <header class="sticky top-0 z-50 glass-panel border-b border-white/5 px-4 md:px-8 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="switchPage('landing')">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center font-black text-xl tracking-tighter shadow-lg shadow-indigo-500/25">
-                DK
+    <!-- ENTERPRISE TOP NAVIGATION -->
+    <header class="sticky top-0 z-50 luxury-glass border-b border-white/5 px-4 md:px-8 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('feed')">
+            <!-- Animated Video Logo -->
+            <div class="w-10 h-10 rounded-xl overflow-hidden border border-indigo-500/30 shadow-lg shadow-indigo-500/20 bg-black flex items-center justify-center">
+                <video src="logobg.mp4" autoplay loop muted playsinline class="w-full h-full object-cover">
+                    <!-- Fallback if logobg.mp4 not loaded -->
+                    <span class="text-xs font-black text-indigo-400">DK</span>
+                </video>
             </div>
             <div>
                 <div class="flex items-center gap-2">
-                    <span class="font-extrabold tracking-wider text-base bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">DAKICKS</span>
-                    <span class="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">STUDIO PRO</span>
+                    <span class="font-black tracking-wider text-base bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent">DAKICKS</span>
+                    <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">NETWORK OS</span>
                 </div>
-                <p class="text-[10px] text-slate-500 font-medium">Enterprise 4K Lossless Engine</p>
+                <p class="text-[10px] text-slate-400 font-mono">Secure Enterprise Stream Protocol</p>
             </div>
         </div>
 
-        <!-- SaaS Navigation Links -->
-        <nav class="hidden md:flex items-center gap-1 glass-panel px-3 py-1.5 rounded-2xl border border-white/10 text-xs">
-            <button onclick="switchPage('landing')" class="nav-btn px-4 py-1.5 rounded-xl font-semibold transition text-slate-300 hover:text-white" data-target="landing">Overview</button>
-            <button onclick="switchPage('studio')" class="nav-btn px-4 py-1.5 rounded-xl font-semibold transition text-slate-300 hover:text-white" data-target="studio">4K Studio</button>
-            <button onclick="switchPage('vault')" class="nav-btn px-4 py-1.5 rounded-xl font-semibold transition text-slate-300 hover:text-white" data-target="vault">Recordings Vault</button>
-            <button onclick="switchPage('pricing')" class="nav-btn px-4 py-1.5 rounded-xl font-semibold transition text-slate-300 hover:text-white" data-target="pricing">Enterprise Plans</button>
+        <!-- Navigation Tabs -->
+        <nav class="hidden md:flex items-center gap-1 luxury-glass px-2.5 py-1.5 rounded-2xl border border-white/5 text-xs">
+            <button onclick="switchTab('feed')" class="nav-btn px-4 py-1.5 rounded-xl font-bold transition text-slate-400 hover:text-white" data-tab="feed">
+                <i data-lucide="tv" class="w-3.5 h-3.5 inline mr-1.5"></i>Watch & Discover
+            </button>
+            <button onclick="switchTab('studio')" class="nav-btn px-4 py-1.5 rounded-xl font-bold transition text-slate-400 hover:text-white" data-tab="studio">
+                <i data-lucide="radio" class="w-3.5 h-3.5 inline mr-1.5"></i>4K Live Studio
+            </button>
+            <button onclick="switchTab('creator')" class="nav-btn px-4 py-1.5 rounded-xl font-bold transition text-slate-400 hover:text-white" data-tab="creator">
+                <i data-lucide="dollar-sign" class="w-3.5 h-3.5 inline mr-1.5"></i>Creator Earnings
+            </button>
+            <button onclick="switchTab('publish')" class="nav-btn px-4 py-1.5 rounded-xl font-bold transition text-slate-400 hover:text-white" data-tab="publish">
+                <i data-lucide="upload-cloud" class="w-3.5 h-3.5 inline mr-1.5"></i>Publish Show
+            </button>
         </nav>
 
-        <!-- Right Side Auth & Actions -->
-        <div class="flex items-center gap-2.5">
-            <button id="authHeaderBtn" onclick="openAuthModal()" class="glass-panel hover:bg-white/5 border border-white/10 text-xs px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 transition">
-                <i data-lucide="user" class="w-3.5 h-3.5 text-indigo-400"></i>
+        <!-- Right Side User & Quick Studio -->
+        <div class="flex items-center gap-3">
+            <button id="authHeaderBtn" onclick="openAuthModal()" class="luxury-glass hover:border-indigo-500/50 text-xs px-3.5 py-2 rounded-xl font-semibold flex items-center gap-2 transition">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
                 <span id="userStatusLabel">Sign In</span>
             </button>
-            <button onclick="switchPage('studio')" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg shadow-indigo-600/30 transition flex items-center gap-2">
-                <i data-lucide="play" class="w-3.5 h-3.5 text-rose-300"></i>
-                <span>Go Live</span>
+            <button onclick="switchTab('studio')" class="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 hover:opacity-90 text-white text-xs font-black px-4 py-2 rounded-xl shadow-lg shadow-indigo-600/30 transition flex items-center gap-1.5">
+                <i data-lucide="video" class="w-3.5 h-3.5"></i> Launch Studio
             </button>
         </div>
     </header>
 
-    <!-- PAGE 1: OVERVIEW / LANDING -->
-    <section id="page-landing" class="page-view flex-1 flex flex-col items-center justify-center text-center px-4 py-12 relative overflow-hidden">
-        <div class="absolute inset-0 -z-10 flex items-center justify-center">
-            <div class="w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[140px]"></div>
-            <div class="w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[120px] -translate-y-24"></div>
-        </div>
-
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-xs font-semibold mb-6">
-            <i data-lucide="zap" class="w-3.5 h-3.5 text-indigo-400"></i> Powered by Dakicks Lossless WebRTC & AI Audio Gate
-        </div>
-
-        <h2 class="text-4xl md:text-7xl font-black tracking-tight text-white mb-6 leading-tight max-w-4xl">
-            Broadcast-Grade Podcasts. <br>
-            <span class="bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">Directly In The Browser.</span>
-        </h2>
-
-        <p class="text-slate-400 text-sm md:text-base max-w-2xl mb-10 leading-relaxed">
-            Record in true 4K without local drops. Auto-sync guest feeds, project 3D audience questions directly onto video screens, and export YouTube thumbnails with AI in seconds.
-        </p>
-
-        <div class="flex flex-wrap items-center justify-center gap-4 mb-16">
-            <button onclick="switchPage('studio')" class="bg-white hover:bg-slate-100 text-slate-950 font-black text-xs md:text-sm px-8 py-4 rounded-2xl shadow-xl transition flex items-center gap-2">
-                <i data-lucide="video" class="w-4 h-4"></i> Enter Studio Live
-            </button>
-            <button onclick="switchPage('pricing')" class="glass-panel hover:bg-white/10 text-slate-200 font-bold text-xs md:text-sm px-8 py-4 rounded-2xl transition">
-                View Studio Pricing
-            </button>
-        </div>
-
-        <!-- Metric Grid -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl w-full text-left">
-            <div class="glass-panel p-5 rounded-2xl border border-white/5">
-                <div class="text-2xl font-black text-indigo-400">4K 60FPS</div>
-                <div class="text-xs text-slate-400 mt-1">VP9 Hardware Accelerated Local Recording</div>
-            </div>
-            <div class="glass-panel p-5 rounded-2xl border border-white/5">
-                <div class="text-2xl font-black text-purple-400">&lt; 15ms</div>
-                <div class="text-xs text-slate-400 mt-1">Real-time Audio Visualizer Latency</div>
-            </div>
-            <div class="glass-panel p-5 rounded-2xl border border-white/5">
-                <div class="text-2xl font-black text-pink-400">3D Overlays</div>
-                <div class="text-xs text-slate-400 mt-1">Live Interactivity with Audience Q&A</div>
-            </div>
-            <div class="glass-panel p-5 rounded-2xl border border-white/5">
-                <div class="text-2xl font-black text-emerald-400">EmailJS</div>
-                <div class="text-xs text-slate-400 mt-1">Instant Cloud UID & Session Notification</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PAGE 2: 4K LIVE STUDIO -->
-    <section id="page-studio" class="page-view hidden flex-1 p-4 md:p-6 max-w-7xl mx-auto w-full flex flex-col gap-5">
+    <!-- SECTION 1: WATCH & DISCOVER FEED (YOUTUBE / SPOTIFY STYLE PODCAST DISCOVERY) -->
+    <main id="tab-feed" class="tab-view flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full flex flex-col gap-8">
         
-        <!-- Studio Bar -->
-        <div class="glass-panel p-3 rounded-2xl flex flex-wrap items-center justify-between gap-3 border border-white/10">
+        <!-- Hero Featured Banner -->
+        <div class="luxury-glass rounded-3xl p-6 md:p-10 border border-white/10 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="max-w-xl z-10 text-left">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-bold mb-4">
+                    <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span> TRENDING NOW &bull; PODCAST NETWORK
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black text-white leading-tight mb-3">
+                    The Billion-Dollar Sneaker Supply Chain Secrets
+                </h2>
+                <p class="text-xs md:text-sm text-slate-400 mb-6 leading-relaxed">
+                    Exclusive high-bitrate interview on foam injection molding, counterfeit detection, and secondary market liquidity.
+                </p>
+                <div class="flex items-center gap-3">
+                    <button onclick="playFeaturedVideo()" class="bg-white hover:bg-slate-200 text-slate-950 text-xs font-black px-6 py-3 rounded-xl transition flex items-center gap-2">
+                        <i data-lucide="play" class="w-4 h-4 fill-slate-950"></i> Watch Episode
+                    </button>
+                    <span class="text-xs text-slate-400 font-mono">148.2K Views &bull; $1,420 Earned</span>
+                </div>
+            </div>
+
+            <!-- Preview Card -->
+            <div class="w-full md:w-96 h-56 rounded-2xl bg-black border border-white/10 overflow-hidden relative shadow-2xl flex items-center justify-center">
+                <video id="featuredPreviewPlayer" src="" playsinline class="w-full h-full object-cover hidden"></video>
+                <div id="featuredPoster" class="text-center p-6 flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-indigo-600/30 border border-indigo-500/50 flex items-center justify-center text-indigo-300 mb-2">
+                        <i data-lucide="mic" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-xs font-bold text-slate-300">Dakicks Special Broadcast</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Podcasts Feed & Grid -->
+        <div>
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-lg font-black text-white">Community Podcasts & Shows</h3>
+                    <p class="text-xs text-slate-500">Discover broadcasts created and monetized by community creators</p>
+                </div>
+                <button onclick="switchTab('publish')" class="text-xs text-indigo-400 hover:text-indigo-300 font-bold flex items-center gap-1">
+                    Upload Your Show <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </button>
+            </div>
+
+            <div id="podcastDirectory" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- Dynamic cards populated by JS -->
+            </div>
+        </div>
+    </main>
+
+    <!-- SECTION 2: 4K STUDIO (LIVE PRODUCTION ENGINE) -->
+    <main id="tab-studio" class="tab-view hidden flex-1 p-4 md:p-6 max-w-7xl mx-auto w-full flex flex-col gap-5">
+        
+        <!-- Status & Invite Header -->
+        <div class="luxury-glass p-3 rounded-2xl flex flex-wrap items-center justify-between gap-3 border border-white/10">
             <div class="flex items-center gap-3">
                 <span id="recordingBadge" class="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 border border-white/5">
                     <span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> STANDBY
@@ -143,37 +143,29 @@
                 <span id="sessionTimer" class="text-xs font-mono font-bold text-slate-300">00:00:00</span>
             </div>
 
-            <!-- Guest Link Generator -->
             <div class="flex items-center gap-2 flex-1 max-w-md">
-                <input type="text" id="guestUrlField" readonly class="bg-black/60 border border-white/10 text-xs px-3 py-2 rounded-xl text-slate-400 w-full truncate font-mono" value="Click invite to generate link">
-                <button onclick="copyGuestInvite()" class="glass-panel hover:bg-white/10 text-xs px-3.5 py-2 rounded-xl font-bold text-indigo-300 whitespace-nowrap transition">
-                    Copy Link
+                <input type="text" id="guestUrlField" readonly class="bg-black/60 border border-white/10 text-xs px-3 py-2 rounded-xl text-slate-400 w-full truncate font-mono" value="Generate invite for guest">
+                <button onclick="copyGuestInvite()" class="luxury-glass hover:bg-white/10 text-xs px-3.5 py-2 rounded-xl font-bold text-indigo-300 whitespace-nowrap transition">
+                    Copy Guest Link
                 </button>
             </div>
 
-            <div class="flex items-center gap-2">
-                <button onclick="toggleNoiseSuppression()" id="noiseFilterBtn" class="glass-panel hover:border-emerald-500/40 text-xs px-3 py-2 rounded-xl text-emerald-400 font-bold flex items-center gap-1.5 transition">
-                    <i data-lucide="shield-check" class="w-4 h-4"></i> AI Noise Gate: ON
-                </button>
-            </div>
+            <button onclick="toggleNoiseSuppression()" id="noiseFilterBtn" class="luxury-glass hover:border-emerald-500/40 text-xs px-3 py-2 rounded-xl text-emerald-400 font-bold flex items-center gap-1.5 transition">
+                <i data-lucide="shield-check" class="w-4 h-4"></i> AI Noise Gate: ON
+            </button>
         </div>
 
-        <!-- Main Studio Workspace (Split 3:1) -->
+        <!-- Video Workspace Split -->
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-5 flex-1">
-            
-            <!-- Video Tiles Left (3 Cols) -->
             <div class="lg:col-span-3 flex flex-col gap-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-[380px] perspective-1000">
                     
-                    <!-- Host Tile -->
-                    <div class="glass-panel rounded-2xl relative overflow-hidden flex items-center justify-center border border-white/10 bg-black min-h-[280px]">
+                    <!-- Host Stream Tile -->
+                    <div class="luxury-glass rounded-2xl relative overflow-hidden flex items-center justify-center border border-white/10 bg-black min-h-[280px]">
                         <div class="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-xs font-semibold">
                             <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Host (You)
                         </div>
-
                         <video id="hostLiveFeed" autoplay playsinline muted class="w-full h-full object-cover"></video>
-
-                        <!-- Real-time audio waveform canvas -->
                         <canvas id="waveformCanvas" class="absolute bottom-2 left-2 right-2 h-10 z-20 pointer-events-none opacity-80"></canvas>
 
                         <!-- 3D HUD Question Overlay -->
@@ -190,38 +182,36 @@
                         </div>
                     </div>
 
-                    <!-- Guest Tile -->
-                    <div class="glass-panel rounded-2xl relative overflow-hidden flex flex-col items-center justify-center border border-white/10 bg-black/40 min-h-[280px]">
+                    <!-- Guest Stream Tile -->
+                    <div class="luxury-glass rounded-2xl relative overflow-hidden flex flex-col items-center justify-center border border-white/10 bg-black/40 min-h-[280px]">
                         <div class="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-xs font-semibold">
-                            <span class="w-2 h-2 rounded-full bg-slate-500"></span> Guest
+                            <span class="w-2 h-2 rounded-full bg-slate-500"></span> Remote Guest
                         </div>
-
                         <div id="guestIdleView" class="text-center p-6 flex flex-col items-center gap-2">
                             <div class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400">
                                 <i data-lucide="user-plus" class="w-5 h-5"></i>
                             </div>
-                            <p class="text-xs font-semibold text-slate-300">Awaiting Remote Stream</p>
-                            <p class="text-[11px] text-slate-500 max-w-xs">Share guest link to bridge HD WebRTC connection.</p>
+                            <p class="text-xs font-semibold text-slate-300">Awaiting Peer Connection</p>
+                            <p class="text-[11px] text-slate-500 max-w-xs">Send invite link above to link video live.</p>
                         </div>
-
                         <div id="guestLiveSimulation" class="hidden w-full h-full relative flex-col items-center justify-center bg-slate-900">
                             <div class="w-20 h-20 rounded-full bg-indigo-600/30 border border-indigo-500/50 flex items-center justify-center font-black text-xl text-indigo-300">
                                 GUEST
                             </div>
                             <div class="absolute bottom-3 left-3 text-[10px] font-mono text-emerald-400 bg-black/70 px-2 py-0.5 rounded">
-                                WebRTC 4K Peer Connected
+                                4K Peer Connected
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Studio Bottom Control Panel -->
-                <div class="glass-panel p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4 border border-white/10">
+                <!-- Studio Bottom Bar -->
+                <div class="luxury-glass p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4 border border-white/10">
                     <div class="flex items-center gap-2">
-                        <button onclick="toggleAudioDevice()" id="audioToggleBtn" class="glass-panel hover:bg-white/10 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                        <button onclick="toggleAudioDevice()" id="audioToggleBtn" class="luxury-glass hover:bg-white/10 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2">
                             <i data-lucide="mic" class="w-4 h-4 text-emerald-400"></i> <span>Mute Mic</span>
                         </button>
-                        <button onclick="toggleVideoDevice()" id="videoToggleBtn" class="glass-panel hover:bg-white/10 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                        <button onclick="toggleVideoDevice()" id="videoToggleBtn" class="luxury-glass hover:bg-white/10 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2">
                             <i data-lucide="camera" class="w-4 h-4 text-emerald-400"></i> <span>Stop Cam</span>
                         </button>
                     </div>
@@ -230,18 +220,16 @@
                         <button onclick="toggleMasterRecording()" id="masterRecBtn" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-90 text-white font-black text-xs px-6 py-3 rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center gap-2">
                             <i data-lucide="disc" class="w-4 h-4"></i> <span>Start 4K Recording</span>
                         </button>
-                        <button onclick="terminateStudioSession()" class="bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/30 text-rose-300 font-bold text-xs px-4 py-3 rounded-xl transition flex items-center gap-2">
+                        <button onclick="switchTab('feed')" class="bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/30 text-rose-300 font-bold text-xs px-4 py-3 rounded-xl transition flex items-center gap-2">
                             <i data-lucide="power" class="w-4 h-4"></i> Leave
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Sidebar: Q&A Engine & AI Production (1 Col) -->
+            <!-- Q&A & AI Post Production Panel -->
             <div class="flex flex-col gap-4">
-                
-                <!-- Live Q&A Manager -->
-                <div class="glass-panel p-4 rounded-2xl flex flex-col h-[340px] border border-white/10">
+                <div class="luxury-glass p-4 rounded-2xl flex flex-col h-[340px] border border-white/10">
                     <div class="flex items-center justify-between pb-2 border-b border-white/5 mb-3">
                         <div class="flex items-center gap-2">
                             <i data-lucide="message-square" class="w-4 h-4 text-indigo-400"></i>
@@ -256,507 +244,28 @@
                     </div>
 
                     <div id="qaItemContainer" class="flex-1 overflow-y-auto space-y-2 pr-1 text-xs">
-                        <div class="glass-panel p-2.5 rounded-xl border border-white/5 flex flex-col gap-2">
-                            <p class="font-medium text-slate-200">"Sneaker industry ka future web3 aur physical pairs mein kya hai?"</p>
+                        <div class="luxury-glass p-2.5 rounded-xl border border-white/5 flex flex-col gap-2">
+                            <p class="font-medium text-slate-200">"Sneaker manufacturing me polyurethane vs rubber sole ka ROI kya hai?"</p>
                             <div class="flex gap-2">
                                 <button onclick="displayQuestionOnOverlay(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-[10px] py-1 rounded-lg font-bold transition">Display 3D</button>
-                                <button onclick="removeQuestionCard(this)" class="glass-panel hover:bg-rose-500/20 text-[10px] px-2 py-1 rounded-lg text-slate-400 hover:text-rose-300 transition">Remove</button>
-                            </div>
-                        </div>
-                        <div class="glass-panel p-2.5 rounded-xl border border-white/5 flex flex-col gap-2">
-                            <p class="font-medium text-slate-200">"Custom sole moulding ke liye best sustainable materials kon se hain?"</p>
-                            <div class="flex gap-2">
-                                <button onclick="displayQuestionOnOverlay(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-[10px] py-1 rounded-lg font-bold transition">Display 3D</button>
-                                <button onclick="removeQuestionCard(this)" class="glass-panel hover:bg-rose-500/20 text-[10px] px-2 py-1 rounded-lg text-slate-400 hover:text-rose-300 transition">Remove</button>
+                                <button onclick="removeQuestionCard(this)" class="luxury-glass hover:bg-rose-500/20 text-[10px] px-2 py-1 rounded-lg text-slate-400 hover:text-rose-300 transition">Remove</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- AI Auto Thumbnail & Viral Clip Engine -->
-                <div class="glass-panel p-4 rounded-2xl flex flex-col gap-3 border border-white/10">
+                <!-- AI Thumbnail Suite -->
+                <div class="luxury-glass p-4 rounded-2xl flex flex-col gap-3 border border-white/10">
                     <div class="flex items-center gap-2 pb-2 border-b border-white/5">
                         <i data-lucide="sparkles" class="w-4 h-4 text-purple-400"></i>
-                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">AI Post Suite</h3>
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">AI Thumbnail Engine</h3>
                     </div>
-
-                    <div class="flex gap-2">
-                        <button onclick="renderAutoThumbnail()" class="flex-1 glass-panel hover:border-purple-500/40 text-[11px] py-2.5 rounded-xl font-bold text-purple-300 transition flex items-center justify-center gap-1.5">
-                            <i data-lucide="image" class="w-3.5 h-3.5"></i> YouTube Cover
-                        </button>
-                        <button onclick="simulateClipExtraction()" class="flex-1 glass-panel hover:border-pink-500/40 text-[11px] py-2.5 rounded-xl font-bold text-pink-300 transition flex items-center justify-center gap-1.5">
-                            <i data-lucide="scissors" class="w-3.5 h-3.5"></i> Auto Clips
-                        </button>
-                    </div>
+                    <button onclick="renderAutoThumbnail()" class="luxury-glass hover:border-purple-500/40 text-[11px] py-2.5 rounded-xl font-bold text-purple-300 transition flex items-center justify-center gap-1.5">
+                        <i data-lucide="image" class="w-3.5 h-3.5"></i> Export 4K YouTube Cover
+                    </button>
                     <div id="aiStudioResult" class="hidden p-3 rounded-xl bg-black/50 border border-white/5 text-xs text-slate-300"></div>
                 </div>
-
             </div>
         </div>
-    </section>
-
-    <!-- PAGE 3: RECORDINGS VAULT -->
-    <section id="page-vault" class="page-view hidden flex-1 p-6 max-w-6xl mx-auto w-full">
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h2 class="text-2xl font-black text-white">Recordings Vault</h2>
-                <p class="text-xs text-slate-400">All local 4K session captures with instant export</p>
-            </div>
-            <button onclick="switchPage('studio')" class="bg-indigo-600 hover:bg-indigo-500 text-xs font-bold px-4 py-2 rounded-xl transition">
-                Start New Session
-            </button>
-        </div>
-
-        <div id="vaultList" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <!-- Default mock card -->
-            <div class="glass-panel p-4 rounded-2xl border border-white/5 flex flex-col gap-3">
-                <div class="w-full h-32 rounded-xl bg-slate-900 flex items-center justify-center border border-white/5 text-slate-600">
-                    <i data-lucide="film" class="w-8 h-8"></i>
-                </div>
-                <div>
-                    <h4 class="text-sm font-bold text-slate-200">Sample-Master-4K.webm</h4>
-                    <p class="text-[11px] text-slate-500 font-mono">1080p / 60fps &bull; 42.8 MB</p>
-                </div>
-                <div class="flex gap-2 mt-auto">
-                    <button class="flex-1 glass-panel hover:bg-white/10 text-xs py-1.5 rounded-lg font-bold text-slate-300 transition" onclick="alert('Session loaded in player')">Play</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PAGE 4: ENTERPRISE PRICING -->
-    <section id="page-pricing" class="page-view hidden flex-1 p-6 max-w-5xl mx-auto w-full text-center py-12">
-        <h2 class="text-3xl md:text-5xl font-black text-white mb-3">Enterprise SaaS Tiers</h2>
-        <p class="text-slate-400 text-xs md:text-sm max-w-xl mx-auto mb-12">Uncapped lossless local 4K recording, automated guest bridging, and personalized branding.</p>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-            <!-- Free -->
-            <div class="glass-panel p-6 rounded-3xl border border-white/5 flex flex-col justify-between">
-                <div>
-                    <h3 class="font-bold text-lg text-slate-200">Starter Creator</h3>
-                    <div class="text-3xl font-black text-white mt-4">$0 <span class="text-xs text-slate-400 font-normal">/ month</span></div>
-                    <ul class="text-xs space-y-2.5 text-slate-300 mt-6">
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Up to 1080p recording</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Standard AI Noise Filter</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> 1 Guest stream</li>
-                    </ul>
-                </div>
-                <button onclick="openAuthModal()" class="w-full glass-panel hover:bg-white/10 text-xs font-bold py-3 rounded-xl transition mt-8">Get Started</button>
-            </div>
-
-            <!-- Pro -->
-            <div class="glass-panel p-6 rounded-3xl border-2 border-indigo-500/60 bg-gradient-to-b from-indigo-950/20 to-transparent flex flex-col justify-between relative">
-                <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">POPULAR</span>
-                <div>
-                    <h3 class="font-bold text-lg text-white">Studio Pro</h3>
-                    <div class="text-3xl font-black text-white mt-4">$49 <span class="text-xs text-slate-400 font-normal">/ month</span></div>
-                    <ul class="text-xs space-y-2.5 text-slate-300 mt-6">
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-indigo-400"></i> True 4K 60FPS Lossless Buffer</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-indigo-400"></i> 3D Live Interactive Overlay</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-indigo-400"></i> Auto YouTube Thumbnail Engine</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-indigo-400"></i> Unlimited Guests</li>
-                    </ul>
-                </div>
-                <button onclick="openAuthModal()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold py-3 rounded-xl transition mt-8 shadow-lg shadow-indigo-600/30">Upgrade To Pro</button>
-            </div>
-
-            <!-- Enterprise -->
-            <div class="glass-panel p-6 rounded-3xl border border-white/5 flex flex-col justify-between">
-                <div>
-                    <h3 class="font-bold text-lg text-slate-200">White-Label Enterprise</h3>
-                    <div class="text-3xl font-black text-white mt-4">$199 <span class="text-xs text-slate-400 font-normal">/ month</span></div>
-                    <ul class="text-xs space-y-2.5 text-slate-300 mt-6">
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-purple-400"></i> Custom Domain Integration</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-purple-400"></i> Direct AWS S3 / Cloud Bucket</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-purple-400"></i> Priority SFU Server Relay</li>
-                    </ul>
-                </div>
-                <button onclick="openAuthModal()" class="w-full glass-panel hover:bg-white/10 text-xs font-bold py-3 rounded-xl transition mt-8">Contact Sales</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- AUTH & SIGNUP MODAL (EMAILJS CONNECTED) -->
-    <div id="authModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
-        <div class="glass-panel bg-[#090b10] border border-white/10 p-6 md:p-8 rounded-3xl max-w-sm w-full text-center relative shadow-2xl">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">&times;</button>
-            
-            <div class="w-12 h-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center mx-auto mb-3">
-                <i data-lucide="mail-check" class="w-6 h-6"></i>
-            </div>
-            <h3 class="text-xl font-black text-white mb-1">DAKICKS Auth</h3>
-            <p class="text-xs text-slate-400 mb-5">Sign up via verified EmailJS integration</p>
-
-            <form id="emailAuthForm" onsubmit="handleEmailJsRegistration(event)" class="space-y-3 text-left">
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Your Name</label>
-                    <input type="text" id="authUserName" required placeholder="John Doe" class="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-indigo-500 mt-1">
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Email Address</label>
-                    <input type="email" id="authUserEmail" required placeholder="name@company.com" class="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-indigo-500 mt-1">
-                </div>
-                <button type="submit" id="authSubmitBtn" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-95 text-white font-bold py-2.5 rounded-xl text-xs transition mt-2 flex items-center justify-center gap-2">
-                    <i data-lucide="send" class="w-3.5 h-3.5"></i> Register Account & Generate UID
-                </button>
-            </form>
-            <div id="authFeedback" class="text-[11px] mt-3 hidden"></div>
-        </div>
-    </div>
-
-    <!-- Hidden Thumbnail Rendering Canvas -->
-    <canvas id="hiddenExportCanvas" width="1280" height="720" class="hidden"></canvas>
-
-    <!-- FOOTER -->
-    <footer class="border-t border-white/5 py-4 px-6 text-center text-xs text-slate-600 mt-auto">
-        DAKICKS Studio Pro &bull; Cloud 4K Media Stream Protocol &bull; All Rights Reserved 2026
-    </footer>
-
-    <!-- CORE LOGIC JAVASCRIPT -->
-    <script>
-        lucide.createIcons();
-
-        const EMAILJS_PUBLIC_KEY = "UZVvtLHuf8uZWHdkg";
-        const EMAILJS_SERVICE_ID = "service_91l0edt";
-        const EMAILJS_TEMPLATE_ID = "template_6a78v2d";
-
-        emailjs.init(EMAILJS_PUBLIC_KEY);
-
-        let mediaStream = null;
-        let mediaRecorder = null;
-        let recordingBlobs = [];
-        let isRecording = false;
-        let audioCtx = null;
-        let analyserNode = null;
-        let visualizerFrame = null;
-        let timerTicker = null;
-        let elapsedSeconds = 0;
-
-        function switchPage(pageKey) {
-            document.querySelectorAll('.page-view').forEach(p => p.classList.add('hidden'));
-            const target = document.getElementById(`page-${pageKey}`);
-            if (target) target.classList.remove('hidden');
-
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                if (btn.dataset.target === pageKey) {
-                    btn.classList.add('bg-white/10', 'text-white');
-                } else {
-                    btn.classList.remove('bg-white/10', 'text-white');
-                }
-            });
-
-            if (pageKey === 'studio' && !mediaStream) {
-                initializeStudioHardware();
-            }
-        }
-
-        function openAuthModal() {
-            document.getElementById('authModal').classList.remove('hidden');
-        }
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.add('hidden');
-        }
-
-        function handleEmailJsRegistration(e) {
-            e.preventDefault();
-            const name = document.getElementById('authUserName').value;
-            const email = document.getElementById('authUserEmail').value;
-            const submitBtn = document.getElementById('authSubmitBtn');
-            const feedback = document.getElementById('authFeedback');
-
-            const generatedUid = "DK-UID-" + Math.floor(100000 + Math.random() * 900000);
-
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `<span>Connecting EmailJS...</span>`;
-
-            const templateParams = {
-                from_name: name,
-                user_email: email,
-                message: `New Dakicks Studio Creator registered: ${name} (${email}) with generated UID: ${generatedUid}`,
-                uid: generatedUid
-            };
-
-            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
-                .then(function(response) {
-                    feedback.classList.remove('hidden', 'text-rose-400');
-                    feedback.classList.add('text-emerald-400');
-                    feedback.innerHTML = `UID Generated: <b>${generatedUid}</b>. Details sent to admin mail!`;
-                    
-                    document.getElementById('userStatusLabel').innerText = generatedUid;
-                    localStorage.setItem('dakicks_user_uid', generatedUid);
-                    localStorage.setItem('dakicks_user_name', name);
-
-                    setTimeout(() => {
-                        closeAuthModal();
-                    }, 2500);
-                }, function(error) {
-                    feedback.classList.remove('hidden', 'text-emerald-400');
-                    feedback.classList.add('text-amber-400');
-                    feedback.innerHTML = `Saved locally! Assigned UID: <b>${generatedUid}</b>`;
-                    document.getElementById('userStatusLabel').innerText = generatedUid;
-                    setTimeout(() => closeAuthModal(), 2500);
-                })
-                .finally(() => {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = `<i data-lucide="send" class="w-3.5 h-3.5"></i> Register Account & Generate UID`;
-                    lucide.createIcons();
-                });
-        }
-
-        async function initializeStudioHardware() {
-            try {
-                mediaStream = await navigator.mediaDevices.getUserMedia({
-                    video: { width: { ideal: 3840 }, height: { ideal: 2160 } },
-                    audio: { echoCancellation: true, noiseSuppression: true }
-                });
-                document.getElementById('hostLiveFeed').srcObject = mediaStream;
-                startVisualizer(mediaStream);
-            } catch (err) {
-                alert("Please grant Camera and Microphone access to use Dakicks Studio.");
-            }
-        }
-
-        function startVisualizer(stream) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const src = audioCtx.createMediaStreamSource(stream);
-            analyserNode = audioCtx.createAnalyser();
-            analyserNode.fftSize = 64;
-            src.connect(analyserNode);
-
-            const canvas = document.getElementById('waveformCanvas');
-            const ctx = canvas.getContext('2d');
-            const bufferLen = analyserNode.frequencyBinCount;
-            const dataArr = new Uint8Array(bufferLen);
-
-            function draw() {
-                visualizerFrame = requestAnimationFrame(draw);
-                analyserNode.getByteFrequencyData(dataArr);
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                const barWidth = (canvas.width / bufferLen) * 2;
-                let x = 0;
-                for (let i = 0; i < bufferLen; i++) {
-                    const barHeight = (dataArr[i] / 255) * canvas.height;
-                    ctx.fillStyle = 'rgba(99, 102, 241, 0.7)';
-                    ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-                    x += barWidth + 2;
-                }
-            }
-            draw();
-        }
-
-        function toggleAudioDevice() {
-            if (mediaStream) {
-                const track = mediaStream.getAudioTracks()[0];
-                track.enabled = !track.enabled;
-                const btn = document.getElementById('audioToggleBtn');
-                btn.innerHTML = track.enabled 
-                    ? '<i data-lucide="mic" class="w-4 h-4 text-emerald-400"></i> <span>Mute Mic</span>'
-                    : '<i data-lucide="mic-off" class="w-4 h-4 text-rose-400"></i> <span>Unmuted</span>';
-                lucide.createIcons();
-            }
-        }
-
-        function toggleVideoDevice() {
-            if (mediaStream) {
-                const track = mediaStream.getVideoTracks()[0];
-                track.enabled = !track.enabled;
-                const btn = document.getElementById('videoToggleBtn');
-                btn.innerHTML = track.enabled 
-                    ? '<i data-lucide="camera" class="w-4 h-4 text-emerald-400"></i> <span>Stop Cam</span>'
-                    : '<i data-lucide="camera-off" class="w-4 h-4 text-rose-400"></i> <span>Start Cam</span>';
-                lucide.createIcons();
-            }
-        }
-
-        function toggleNoiseSuppression() {
-            const btn = document.getElementById('noiseFilterBtn');
-            if (btn.innerText.includes('ON')) {
-                btn.innerHTML = '<i data-lucide="shield-alert" class="w-4 h-4"></i> AI Noise Gate: OFF';
-                btn.classList.replace('text-emerald-400', 'text-amber-400');
-            } else {
-                btn.innerHTML = '<i data-lucide="shield-check" class="w-4 h-4"></i> AI Noise Gate: ON';
-                btn.classList.replace('text-amber-400', 'text-emerald-400');
-            }
-            lucide.createIcons();
-        }
-
-        function toggleMasterRecording() {
-            const btn = document.getElementById('masterRecBtn');
-            const badge = document.getElementById('recordingBadge');
-
-            if (!isRecording) {
-                recordingBlobs = [];
-                try {
-                    mediaRecorder = new MediaRecorder(mediaStream, { mimeType: 'video/webm; codecs=vp9' });
-                } catch (e) {
-                    mediaRecorder = new MediaRecorder(mediaStream);
-                }
-
-                mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordingBlobs.push(e.data); };
-                mediaRecorder.onstop = saveAndDownloadRecording;
-                mediaRecorder.start(1000);
-
-                isRecording = true;
-                btn.innerHTML = '<i data-lucide="square" class="w-4 h-4 text-white"></i> <span>Stop 4K Recording</span>';
-                btn.className = "bg-rose-600 hover:bg-rose-500 text-white font-black text-xs px-6 py-3 rounded-xl shadow-lg shadow-rose-600/30 transition flex items-center gap-2";
-                badge.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span> 4K ON-AIR';
-                badge.classList.replace('text-slate-400', 'text-rose-400');
-
-                elapsedSeconds = 0;
-                timerTicker = setInterval(() => {
-                    elapsedSeconds++;
-                    const h = String(Math.floor(elapsedSeconds / 3600)).padStart(2, '0');
-                    const m = String(Math.floor((elapsedSeconds % 3600) / 60)).padStart(2, '0');
-                    const s = String(elapsedSeconds % 60).padStart(2, '0');
-                    document.getElementById('sessionTimer').innerText = `${h}:${m}:${s}`;
-                }, 1000);
-            } else {
-                mediaRecorder.stop();
-                isRecording = false;
-                btn.innerHTML = '<i data-lucide="disc" class="w-4 h-4"></i> <span>Start 4K Recording</span>';
-                btn.className = "bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-90 text-white font-black text-xs px-6 py-3 rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center gap-2";
-                badge.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> STANDBY';
-                badge.classList.replace('text-rose-400', 'text-slate-400');
-                clearInterval(timerTicker);
-            }
-            lucide.createIcons();
-        }
-
-        function saveAndDownloadRecording() {
-            const blob = new Blob(recordingBlobs, { type: 'video/webm' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `DAKICKS-STUDIO-4K-${Date.now()}.webm`;
-            document.body.appendChild(a);
-            a.click();
-            alert("Studio Master saved and downloaded to your device storage!");
-        }
-
-        function terminateStudioSession() {
-            if (isRecording) toggleMasterRecording();
-            if (mediaStream) {
-                mediaStream.getTracks().forEach(t => t.stop());
-                mediaStream = null;
-            }
-            if (visualizerFrame) cancelAnimationFrame(visualizerFrame);
-            clearInterval(timerTicker);
-            switchPage('landing');
-        }
-
-        function copyGuestInvite() {
-            const guestRoomId = "dk-room-" + Math.random().toString(36).substring(2, 8);
-            const fullGuestUrl = window.location.href.split('?')[0] + "?room=" + guestRoomId + "&type=guest";
-            document.getElementById('guestUrlField').value = fullGuestUrl;
-            navigator.clipboard.writeText(fullGuestUrl);
-            alert("Guest invite URL copied! Share this link with your co-host.");
-
-            setTimeout(() => {
-                document.getElementById('guestIdleView').classList.add('hidden');
-                document.getElementById('guestLiveSimulation').classList.remove('hidden');
-                document.getElementById('guestLiveSimulation').classList.add('flex');
-            }, 2500);
-        }
-
-        function displayQuestionOnOverlay(btn) {
-            const text = btn.parentElement.previousElementSibling.innerText.replace(/"/g, '');
-            document.getElementById('screenQuestionText').innerText = text;
-            document.getElementById('screenQuestionOverlay').classList.remove('hidden');
-        }
-
-        function dismissScreenOverlay() {
-            document.getElementById('screenQuestionOverlay').classList.add('hidden');
-        }
-
-        function removeQuestionCard(btn) {
-            btn.closest('.glass-panel').remove();
-            updateQACount();
-        }
-
-        function addNewQuestion() {
-            const inp = document.getElementById('newQuestionInput');
-            const val = inp.value.trim();
-            if (!val) return;
-
-            const box = document.createElement('div');
-            box.className = "glass-panel p-2.5 rounded-xl border border-white/5 flex flex-col gap-2";
-            box.innerHTML = `
-                <p class="font-medium text-slate-200">"${val}"</p>
-                <div class="flex gap-2">
-                    <button onclick="displayQuestionOnOverlay(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-[10px] py-1 rounded-lg font-bold transition">Display 3D</button>
-                    <button onclick="removeQuestionCard(this)" class="glass-panel hover:bg-rose-500/20 text-[10px] px-2 py-1 rounded-lg text-slate-400 hover:text-rose-300 transition">Remove</button>
-                </div>
-            `;
-            document.getElementById('qaItemContainer').prepend(box);
-            inp.value = "";
-            updateQACount();
-        }
-
-        function updateQACount() {
-            const count = document.getElementById('qaItemContainer').children.length;
-            document.getElementById('qaCounter').innerText = `${count} Queued`;
-        }
-
-        function renderAutoThumbnail() {
-            const canvas = document.getElementById('hiddenExportCanvas');
-            const ctx = canvas.getContext('2d');
-            const vid = document.getElementById('hostLiveFeed');
-
-            ctx.fillStyle = "#07090e";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            if (vid && vid.videoWidth > 0) {
-                ctx.drawImage(vid, 0, 0, canvas.width / 2, canvas.height);
-            }
-
-            const gradient = ctx.createLinearGradient(canvas.width / 2, 0, canvas.width, canvas.height);
-            gradient.addColorStop(0, 'rgba(7, 9, 14, 0.4)');
-            gradient.addColorStop(1, 'rgba(79, 70, 229, 0.9)');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(canvas.width / 2, 0, canvas.width / 2, canvas.height);
-
-            ctx.fillStyle = "#FFFFFF";
-            ctx.font = "bold 60px sans-serif";
-            ctx.fillText("DAKICKS 4K EXCLUSIVE", canvas.width / 2 + 40, 280);
-
-            ctx.fillStyle = "#F43F5E";
-            ctx.font = "bold 38px sans-serif";
-            ctx.fillText("BEHIND THE SCENES LIVE", canvas.width / 2 + 40, 350);
-
-            const imageURI = canvas.toDataURL('image/png');
-            const out = document.getElementById('aiStudioResult');
-            out.classList.remove('hidden');
-            out.innerHTML = `
-                <div class="font-bold text-emerald-400 mb-1 flex items-center gap-1">
-                    <i data-lucide="check" class="w-3.5 h-3.5"></i> Thumbnail Rendered!
-                </div>
-                <img src="${imageURI}" class="rounded-lg w-full mb-2 border border-white/10">
-                <a href="${imageURI}" download="dakicks-youtube-thumb.png" class="block w-full text-center bg-purple-600 hover:bg-purple-500 font-bold py-1.5 rounded-lg text-xs transition text-white">Save YouTube Cover</a>
-            `;
-            lucide.createIcons();
-        }
-
-        function simulateClipExtraction() {
-            const out = document.getElementById('aiStudioResult');
-            out.classList.remove('hidden');
-            out.innerHTML = `
-                <div class="font-bold text-indigo-400 mb-1">AI Smart Cut Highlight</div>
-                <p class="text-[10px] text-slate-400 mb-2">Analyzing speech cadence...</p>
-                <div class="p-2 rounded bg-white/5 text-[11px] flex justify-between">
-                    <span>Clip 1: Sneaker Pricing Secrets</span>
-                    <span class="text-emerald-400 font-mono">98% Viral Score</span>
-                </div>
-            `;
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const storedUID = localStorage.getItem('dakicks_user_uid');
-            if (storedUID) {
-                document.getElementById('userStatusLabel').innerText = storedUID;
-            }
-        });
-    </script>
-</body>
-</html>
-
-                
+    </main>
+    
