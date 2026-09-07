@@ -1,600 +1,292 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DAKICKS Studio Pro | Ultimate 4K Cloud Podcasting</title>
+    <title>DAKICKS PRO | Next-Gen Cloud 4K Podcast Platform</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 25px rgba(99, 102, 241, 0.4); }
-            50% { box-shadow: 0 0 45px rgba(168, 85, 247, 0.6); }
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                            950: '#07090e'
+                        }
+                    }
+                }
+            }
         }
-        .luxury-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
-            backdrop-filter: blur(16px);
+    </script>
+    <style>
+        .glass-panel {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .glow-active {
-            animation: pulse-glow 3s infinite;
-        }
-        /* Custom 3D Question Perspective */
         .perspective-1000 {
             perspective: 1000px;
         }
-        .transform-3d {
-            transform-style: preserve-3d;
-            transform: rotateX(8deg) translateZ(20px);
+        .transform-hud {
+            transform: rotateX(6deg) translateZ(15px);
         }
     </style>
 </head>
-<body class="bg-[#07090e] text-slate-100 font-sans min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+<body class="bg-brand-950 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white antialiased">
 
-    <!-- Top Navigation -->
-    <header class="sticky top-0 z-40 border-b border-white/5 luxury-card px-6 py-4 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center font-black text-xl tracking-tighter shadow-lg shadow-indigo-500/20">
+    <!-- TOP NAVIGATION BAR -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-white/5 px-4 md:px-8 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="switchPage('landing')">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center font-black text-xl tracking-tighter shadow-lg shadow-indigo-500/25">
                 DK
             </div>
             <div>
-                <h1 class="text-lg font-black tracking-wider bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent leading-none">
-                    DAKICKS <span class="text-xs uppercase px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-400 font-bold ml-1 border border-indigo-500/30">PRO STUDIO</span>
-                </h1>
-                <p class="text-[11px] text-slate-500 font-medium tracking-wide">4K Lossless Real-time Engine</p>
+                <div class="flex items-center gap-2">
+                    <span class="font-extrabold tracking-wider text-base bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">DAKICKS</span>
+                    <span class="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">STUDIO PRO</span>
+                </div>
+                <p class="text-[10px] text-slate-500 font-medium">Enterprise 4K Lossless Engine</p>
             </div>
         </div>
 
-        <div class="flex items-center gap-3">
-            <button onclick="openAuthModal()" id="userAuthBtn" class="luxury-card hover:border-indigo-500/50 text-xs px-4 py-2 rounded-xl font-medium transition flex items-center gap-2">
-                <i data-lucide="user" class="w-4 h-4 text-indigo-400"></i>
-                <span id="authStatusText">Sign In</span>
+        <!-- SaaS Navigation Links -->
+        <nav class="hidden md:flex items-center gap-1 glass-panel px-3 py-1.5 rounded-2xl border border-white/10 text-xs">
+            <button onclick="switchPage('landing')" class="nav-btn px-4 py-1.5 rounded-xl font-semibold transition text-slate-300 hover:text-white" data-target="landing">Overview</button>
+            <button onclick="switchPage('studio')" class="nav-btn px-4 py-1.5 rounded-xl font-semibold transition text-slate-300 hover:text-white" data-target="studio">4K Studio</button>
+            <button onclick="switchPage('vault')" class="nav-btn px-4 py-1.5 rounded-xl font-semibold transition text-slate-300 hover:text-white" data-target="vault">Recordings Vault</button>
+            <button onclick="switchPage('pricing')" class="nav-btn px-4 py-1.5 rounded-xl font-semibold transition text-slate-300 hover:text-white" data-target="pricing">Enterprise Plans</button>
+        </nav>
+
+        <!-- Right Side Auth & Actions -->
+        <div class="flex items-center gap-2.5">
+            <button id="authHeaderBtn" onclick="openAuthModal()" class="glass-panel hover:bg-white/5 border border-white/10 text-xs px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 transition">
+                <i data-lucide="user" class="w-3.5 h-3.5 text-indigo-400"></i>
+                <span id="userStatusLabel">Sign In</span>
             </button>
-            <button onclick="startInstantStudio()" class="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 hover:opacity-95 text-white text-xs px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-indigo-600/30 transition flex items-center gap-2">
-                <i data-lucide="radio" class="w-4 h-4 text-rose-300 animate-pulse"></i>
-                Launch Studio
+            <button onclick="switchPage('studio')" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg shadow-indigo-600/30 transition flex items-center gap-2">
+                <i data-lucide="play" class="w-3.5 h-3.5 text-rose-300"></i>
+                <span>Go Live</span>
             </button>
         </div>
     </header>
 
-    <!-- LANDING VIEW -->
-    <main id="homeView" class="flex-1 flex flex-col items-center justify-center text-center px-4 py-12 relative overflow-hidden">
+    <!-- PAGE 1: OVERVIEW / LANDING -->
+    <section id="page-landing" class="page-view flex-1 flex flex-col items-center justify-center text-center px-4 py-12 relative overflow-hidden">
         <div class="absolute inset-0 -z-10 flex items-center justify-center">
-            <div class="w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-3xl"></div>
-            <div class="w-[350px] h-[350px] bg-purple-600/10 rounded-full blur-3xl -translate-y-24"></div>
+            <div class="w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[140px]"></div>
+            <div class="w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[120px] -translate-y-24"></div>
         </div>
 
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-indigo-500/20 bg-indigo-500/10 text-indigo-300 text-xs font-semibold mb-6">
-            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-400"></i> AI Powered Crystal Noise Gate Enabled
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-xs font-semibold mb-6">
+            <i data-lucide="zap" class="w-3.5 h-3.5 text-indigo-400"></i> Powered by Dakicks Lossless WebRTC & AI Audio Gate
         </div>
 
-        <h2 class="text-4xl md:text-7xl font-black tracking-tight max-w-4xl text-white mb-6 leading-tight">
-            Next-Gen Podcast Engine. <br>
-            <span class="bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">Zero Lag. Ultra Luxury.</span>
+        <h2 class="text-4xl md:text-7xl font-black tracking-tight text-white mb-6 leading-tight max-w-4xl">
+            Broadcast-Grade Podcasts. <br>
+            <span class="bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">Directly In The Browser.</span>
         </h2>
 
-        <p class="text-slate-400 text-base md:text-lg max-w-2xl mb-10 leading-relaxed">
-            Direct high-definition browser-to-cloud recording, automated 3D broadcast overlays, real-time noise cancellation, and instant AI clipping—built for enterprise podcast creators.
+        <p class="text-slate-400 text-sm md:text-base max-w-2xl mb-10 leading-relaxed">
+            Record in true 4K without local drops. Auto-sync guest feeds, project 3D audience questions directly onto video screens, and export YouTube thumbnails with AI in seconds.
         </p>
 
-        <div class="flex flex-wrap items-center justify-center gap-4">
-            <button onclick="startInstantStudio()" class="bg-white hover:bg-slate-100 text-slate-950 font-extrabold text-sm px-8 py-4 rounded-2xl shadow-xl shadow-white/5 transition flex items-center gap-2">
-                <i data-lucide="video" class="w-5 h-5"></i>
-                Enter 4K Live Studio
+        <div class="flex flex-wrap items-center justify-center gap-4 mb-16">
+            <button onclick="switchPage('studio')" class="bg-white hover:bg-slate-100 text-slate-950 font-black text-xs md:text-sm px-8 py-4 rounded-2xl shadow-xl transition flex items-center gap-2">
+                <i data-lucide="video" class="w-4 h-4"></i> Enter Studio Live
             </button>
-            <button onclick="openAuthModal()" class="luxury-card hover:bg-white/5 text-slate-200 font-bold text-sm px-8 py-4 rounded-2xl transition">
-                Create Account
+            <button onclick="switchPage('pricing')" class="glass-panel hover:bg-white/10 text-slate-200 font-bold text-xs md:text-sm px-8 py-4 rounded-2xl transition">
+                View Studio Pricing
             </button>
         </div>
 
-        <!-- Metric badges -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl w-full mt-16 text-left">
-            <div class="luxury-card p-5 rounded-2xl">
-                <div class="text-2xl font-black text-indigo-400">6 Hours</div>
-                <div class="text-xs text-slate-400 mt-1 font-medium">Continuous Lossless Record Buffer</div>
+        <!-- Metric Grid -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl w-full text-left">
+            <div class="glass-panel p-5 rounded-2xl border border-white/5">
+                <div class="text-2xl font-black text-indigo-400">4K 60FPS</div>
+                <div class="text-xs text-slate-400 mt-1">VP9 Hardware Accelerated Local Recording</div>
             </div>
-            <div class="luxury-card p-5 rounded-2xl">
-                <div class="text-2xl font-black text-purple-400">AI Crisp</div>
-                <div class="text-xs text-slate-400 mt-1 font-medium">Automatic Room Echo & Hum Filter</div>
+            <div class="glass-panel p-5 rounded-2xl border border-white/5">
+                <div class="text-2xl font-black text-purple-400">&lt; 15ms</div>
+                <div class="text-xs text-slate-400 mt-1">Real-time Audio Visualizer Latency</div>
             </div>
-            <div class="luxury-card p-5 rounded-2xl">
-                <div class="text-2xl font-black text-pink-400">3D HUD</div>
-                <div class="text-xs text-slate-400 mt-1 font-medium">Audience Question Projection</div>
+            <div class="glass-panel p-5 rounded-2xl border border-white/5">
+                <div class="text-2xl font-black text-pink-400">3D Overlays</div>
+                <div class="text-xs text-slate-400 mt-1">Live Interactivity with Audience Q&A</div>
             </div>
-            <div class="luxury-card p-5 rounded-2xl">
-                <div class="text-2xl font-black text-emerald-400">Zero Logo</div>
-                <div class="text-xs text-slate-400 mt-1 font-medium">100% White-label Studio Export</div>
+            <div class="glass-panel p-5 rounded-2xl border border-white/5">
+                <div class="text-2xl font-black text-emerald-400">EmailJS</div>
+                <div class="text-xs text-slate-400 mt-1">Instant Cloud UID & Session Notification</div>
             </div>
         </div>
-    </main>
+    </section>
 
-    <!-- PRO STUDIO VIEW (Hidden by default) -->
-    <main id="studioView" class="hidden flex-1 p-4 md:p-6 grid grid-cols-1 xl:grid-cols-4 gap-6 max-w-7xl mx-auto w-full">
+    <!-- PAGE 2: 4K LIVE STUDIO -->
+    <section id="page-studio" class="page-view hidden flex-1 p-4 md:p-6 max-w-7xl mx-auto w-full flex flex-col gap-5">
         
-        <!-- Left: Stage Area (3 cols) -->
-        <div class="xl:col-span-3 flex flex-col gap-4">
-            
-            <!-- Control Header -->
-            <div class="luxury-card p-3 rounded-2xl flex flex-wrap items-center justify-between gap-3">
-                <div class="flex items-center gap-3">
-                    <span id="studioRecIndicator" class="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800/80 text-slate-400 border border-white/5">
-                        <span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> STANDBY
-                    </span>
-                    <span id="recTimer" class="text-xs font-mono font-bold text-slate-400">00:00:00</span>
-                </div>
+        <!-- Studio Bar -->
+        <div class="glass-panel p-3 rounded-2xl flex flex-wrap items-center justify-between gap-3 border border-white/10">
+            <div class="flex items-center gap-3">
+                <span id="recordingBadge" class="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 border border-white/5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> STANDBY
+                </span>
+                <span id="sessionTimer" class="text-xs font-mono font-bold text-slate-300">00:00:00</span>
+            </div>
 
-                <div class="flex items-center gap-2 flex-1 max-w-sm">
-                    <input type="text" id="guestLinkInput" readonly class="bg-black/50 border border-white/10 text-xs px-3 py-2 rounded-xl text-slate-400 w-full truncate font-mono" value="Generate unique link for guest">
-                    <button onclick="generateGuestInvite()" class="luxury-card hover:bg-white/10 text-xs px-3 py-2 rounded-xl font-bold whitespace-nowrap text-indigo-300 transition">
-                        Copy Invite
-                    </button>
-                </div>
-
-                <button onclick="toggleAiNoiseGate()" id="noiseGateBtn" class="luxury-card hover:border-emerald-500/40 text-xs px-3 py-2 rounded-xl text-emerald-400 font-bold flex items-center gap-1.5 transition">
-                    <i data-lucide="shield-check" class="w-4 h-4"></i> AI Noise: ON
+            <!-- Guest Link Generator -->
+            <div class="flex items-center gap-2 flex-1 max-w-md">
+                <input type="text" id="guestUrlField" readonly class="bg-black/60 border border-white/10 text-xs px-3 py-2 rounded-xl text-slate-400 w-full truncate font-mono" value="Click invite to generate link">
+                <button onclick="copyGuestInvite()" class="glass-panel hover:bg-white/10 text-xs px-3.5 py-2 rounded-xl font-bold text-indigo-300 whitespace-nowrap transition">
+                    Copy Link
                 </button>
             </div>
 
-            <!-- Video Tiles Section -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-[420px] relative perspective-1000">
-                
-                <!-- Host Video Tile -->
-                <div class="luxury-card rounded-2xl relative overflow-hidden flex items-center justify-center border border-white/10 glow-active bg-black">
-                    <div class="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-xs font-semibold">
-                        <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Host (You)
-                    </div>
+            <div class="flex items-center gap-2">
+                <button onclick="toggleNoiseSuppression()" id="noiseFilterBtn" class="glass-panel hover:border-emerald-500/40 text-xs px-3 py-2 rounded-xl text-emerald-400 font-bold flex items-center gap-1.5 transition">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i> AI Noise Gate: ON
+                </button>
+            </div>
+        </div>
 
-                    <video id="hostVideo" autoplay playsinline muted class="w-full h-full object-cover"></video>
+        <!-- Main Studio Workspace (Split 3:1) -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-5 flex-1">
+            
+            <!-- Video Tiles Left (3 Cols) -->
+            <div class="lg:col-span-3 flex flex-col gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-[380px] perspective-1000">
+                    
+                    <!-- Host Tile -->
+                    <div class="glass-panel rounded-2xl relative overflow-hidden flex items-center justify-center border border-white/10 bg-black min-h-[280px]">
+                        <div class="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-xs font-semibold">
+                            <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Host (You)
+                        </div>
 
-                    <!-- Realtime Audio Waveform Visualizer -->
-                    <canvas id="audioVisualizer" class="absolute bottom-2 left-2 right-2 h-10 z-20 pointer-events-none opacity-80"></canvas>
+                        <video id="hostLiveFeed" autoplay playsinline muted class="w-full h-full object-cover"></video>
 
-                    <!-- 3D Luxury Live Question Overlay -->
-                    <div id="liveQuestionOverlay" class="hidden absolute bottom-6 left-6 right-6 z-30 transform-3d transition-all duration-500">
-                        <div class="bg-gradient-to-r from-slate-900/95 via-indigo-950/90 to-purple-950/95 border-2 border-indigo-500/50 p-5 rounded-2xl shadow-2xl backdrop-blur-xl">
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-[10px] uppercase tracking-widest text-indigo-400 font-extrabold flex items-center gap-1">
-                                    <i data-lucide="help-circle" class="w-3 h-3"></i> Screen Displayed Question
-                                </span>
-                                <button onclick="hideCurrentOverlay()" class="text-slate-400 hover:text-white text-xs">&times;</button>
+                        <!-- Real-time audio waveform canvas -->
+                        <canvas id="waveformCanvas" class="absolute bottom-2 left-2 right-2 h-10 z-20 pointer-events-none opacity-80"></canvas>
+
+                        <!-- 3D HUD Question Overlay -->
+                        <div id="screenQuestionOverlay" class="hidden absolute bottom-5 left-5 right-5 z-30 transform-hud transition-all duration-300">
+                            <div class="bg-gradient-to-r from-slate-900/95 via-indigo-950/90 to-purple-950/95 border-2 border-indigo-500/60 p-4 rounded-2xl shadow-2xl backdrop-blur-xl">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10px] font-black uppercase tracking-widest text-indigo-400 flex items-center gap-1.5">
+                                        <i data-lucide="help-circle" class="w-3 h-3"></i> Audience Question
+                                    </span>
+                                    <button onclick="dismissScreenOverlay()" class="text-slate-400 hover:text-white text-xs">&times;</button>
+                                </div>
+                                <p id="screenQuestionText" class="text-sm md:text-base font-extrabold text-white leading-snug"></p>
                             </div>
-                            <p id="overlayQuestionBody" class="text-base md:text-lg font-black text-white leading-snug drop-shadow"></p>
+                        </div>
+                    </div>
+
+                    <!-- Guest Tile -->
+                    <div class="glass-panel rounded-2xl relative overflow-hidden flex flex-col items-center justify-center border border-white/10 bg-black/40 min-h-[280px]">
+                        <div class="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-xs font-semibold">
+                            <span class="w-2 h-2 rounded-full bg-slate-500"></span> Guest
+                        </div>
+
+                        <div id="guestIdleView" class="text-center p-6 flex flex-col items-center gap-2">
+                            <div class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400">
+                                <i data-lucide="user-plus" class="w-5 h-5"></i>
+                            </div>
+                            <p class="text-xs font-semibold text-slate-300">Awaiting Remote Stream</p>
+                            <p class="text-[11px] text-slate-500 max-w-xs">Share guest link to bridge HD WebRTC connection.</p>
+                        </div>
+
+                        <div id="guestLiveSimulation" class="hidden w-full h-full relative flex-col items-center justify-center bg-slate-900">
+                            <div class="w-20 h-20 rounded-full bg-indigo-600/30 border border-indigo-500/50 flex items-center justify-center font-black text-xl text-indigo-300">
+                                GUEST
+                            </div>
+                            <div class="absolute bottom-3 left-3 text-[10px] font-mono text-emerald-400 bg-black/70 px-2 py-0.5 rounded">
+                                WebRTC 4K Peer Connected
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Guest Video Tile -->
-                <div class="luxury-card rounded-2xl relative overflow-hidden flex flex-col items-center justify-center border border-white/10 bg-black/40">
-                    <div class="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-xs font-semibold">
-                        <span class="w-2 h-2 rounded-full bg-slate-500"></span> Guest
-                    </div>
-
-                    <div id="guestEmptyState" class="text-center p-6 flex flex-col items-center gap-3">
-                        <div class="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-500">
-                            <i data-lucide="user-plus" class="w-6 h-6"></i>
-                        </div>
-                        <p class="text-sm font-semibold text-slate-300">Awaiting Guest Connection</p>
-                        <p class="text-xs text-slate-500 max-w-xs">Share your guest link. The guest stream renders in 4K resolution automatically.</p>
-                    </div>
-
-                    <div id="guestMockStream" class="hidden w-full h-full relative items-center justify-center bg-slate-900">
-                        <div class="w-24 h-24 rounded-full bg-indigo-600/30 border border-indigo-500/50 flex items-center justify-center font-black text-2xl text-indigo-200">
-                            GUEST
-                        </div>
-                        <div class="absolute bottom-4 left-4 text-xs font-mono text-emerald-400 bg-black/70 px-2 py-1 rounded">
-                            4K SFU Connected (Simulated)
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Studio Action Bar -->
-            <div class="luxury-card p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4">
-                <div class="flex items-center gap-2">
-                    <button onclick="toggleAudio()" id="micBtn" class="luxury-card hover:bg-white/10 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2">
-                        <i data-lucide="mic" class="w-4 h-4 text-emerald-400"></i> <span>Mute</span>
-                    </button>
-                    <button onclick="toggleVideo()" id="camBtn" class="luxury-card hover:bg-white/10 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2">
-                        <i data-lucide="camera" class="w-4 h-4 text-emerald-400"></i> <span>Stop Cam</span>
-                    </button>
-                </div>
-
-                <div class="flex items-center gap-3">
-                    <button onclick="toggleStudioRecord()" id="recMasterBtn" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-90 text-white font-black text-xs px-6 py-3 rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center gap-2">
-                        <i data-lucide="circle-dot" class="w-4 h-4 text-white"></i> <span>Start 4K Recording</span>
-                    </button>
-                    <button onclick="exitStudioMode()" class="bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/30 text-rose-300 font-bold text-xs px-4 py-3 rounded-xl transition flex items-center gap-2">
-                        <i data-lucide="phone-off" class="w-4 h-4"></i> End
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Right: Real-time Q&A Queue & AI Post-Production Panel (1 col) -->
-        <div class="flex flex-col gap-4">
-            
-            <!-- Live Question Queue -->
-            <div class="luxury-card p-4 rounded-2xl flex flex-col h-[380px]">
-                <div class="flex items-center justify-between pb-3 border-b border-white/5 mb-3">
+                <!-- Studio Bottom Control Panel -->
+                <div class="glass-panel p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4 border border-white/10">
                     <div class="flex items-center gap-2">
-                        <i data-lucide="message-square" class="w-4 h-4 text-indigo-400"></i>
-                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Live Q&A Queue</h3>
+                        <button onclick="toggleAudioDevice()" id="audioToggleBtn" class="glass-panel hover:bg-white/10 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                            <i data-lucide="mic" class="w-4 h-4 text-emerald-400"></i> <span>Mute Mic</span>
+                        </button>
+                        <button onclick="toggleVideoDevice()" id="videoToggleBtn" class="glass-panel hover:bg-white/10 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                            <i data-lucide="camera" class="w-4 h-4 text-emerald-400"></i> <span>Stop Cam</span>
+                        </button>
                     </div>
-                    <span id="questionCount" class="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full font-bold">3 New</span>
-                </div>
 
-                <!-- Add quick question -->
-                <div class="flex gap-2 mb-3">
-                    <input type="text" id="manualQuestionInput" placeholder="Add custom question..." class="bg-black/40 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-slate-200 flex-1 outline-none focus:border-indigo-500">
-                    <button onclick="addCustomQuestion()" class="bg-indigo-600 hover:bg-indigo-500 text-xs px-3 py-1.5 rounded-xl font-bold transition">+</button>
+                    <div class="flex items-center gap-3">
+                        <button onclick="toggleMasterRecording()" id="masterRecBtn" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-90 text-white font-black text-xs px-6 py-3 rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center gap-2">
+                            <i data-lucide="disc" class="w-4 h-4"></i> <span>Start 4K Recording</span>
+                        </button>
+                        <button onclick="terminateStudioSession()" class="bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/30 text-rose-300 font-bold text-xs px-4 py-3 rounded-xl transition flex items-center gap-2">
+                            <i data-lucide="power" class="w-4 h-4"></i> Leave
+                        </button>
+                    </div>
                 </div>
+            </div>
 
-                <!-- Questions List (Scrollable) -->
-                <div id="questionsContainer" class="flex-1 overflow-y-auto space-y-2 pr-1">
-                    <!-- Default Questions -->
-                    <div class="luxury-card p-3 rounded-xl border border-white/5 flex flex-col gap-2">
-                        <p class="text-xs font-medium text-slate-200 leading-snug">"Aapka next major sneaker line drop kab plan hai?"</p>
-                        <div class="flex gap-2">
-                            <button onclick="trigger3DOverlay(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-[11px] py-1 rounded-lg font-bold transition">Display 3D</button>
-                            <button onclick="removeQuestionItem(this)" class="luxury-card hover:bg-rose-500/20 text-[11px] px-2.5 py-1 rounded-lg text-slate-400 hover:text-rose-300 transition">Remove</button>
+            <!-- Right Sidebar: Q&A Engine & AI Production (1 Col) -->
+            <div class="flex flex-col gap-4">
+                
+                <!-- Live Q&A Manager -->
+                <div class="glass-panel p-4 rounded-2xl flex flex-col h-[340px] border border-white/10">
+                    <div class="flex items-center justify-between pb-2 border-b border-white/5 mb-3">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="message-square" class="w-4 h-4 text-indigo-400"></i>
+                            <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Live Q&A Queue</h3>
+                        </div>
+                        <span id="qaCounter" class="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full font-bold">2 Queued</span>
+                    </div>
+
+                    <div class="flex gap-2 mb-3">
+                        <input type="text" id="newQuestionInput" placeholder="Add custom question..." class="bg-black/40 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-slate-200 flex-1 outline-none focus:border-indigo-500">
+                        <button onclick="addNewQuestion()" class="bg-indigo-600 hover:bg-indigo-500 text-xs px-3.5 py-1.5 rounded-xl font-bold transition">+</button>
+                    </div>
+
+                    <div id="qaItemContainer" class="flex-1 overflow-y-auto space-y-2 pr-1 text-xs">
+                        <div class="glass-panel p-2.5 rounded-xl border border-white/5 flex flex-col gap-2">
+                            <p class="font-medium text-slate-200">"Sneaker industry ka future web3 aur physical pairs mein kya hai?"</p>
+                            <div class="flex gap-2">
+                                <button onclick="displayQuestionOnOverlay(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-[10px] py-1 rounded-lg font-bold transition">Display 3D</button>
+                                <button onclick="removeQuestionCard(this)" class="glass-panel hover:bg-rose-500/20 text-[10px] px-2 py-1 rounded-lg text-slate-400 hover:text-rose-300 transition">Remove</button>
+                            </div>
+                        </div>
+                        <div class="glass-panel p-2.5 rounded-xl border border-white/5 flex flex-col gap-2">
+                            <p class="font-medium text-slate-200">"Custom sole moulding ke liye best sustainable materials kon se hain?"</p>
+                            <div class="flex gap-2">
+                                <button onclick="displayQuestionOnOverlay(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-[10px] py-1 rounded-lg font-bold transition">Display 3D</button>
+                                <button onclick="removeQuestionCard(this)" class="glass-panel hover:bg-rose-500/20 text-[10px] px-2 py-1 rounded-lg text-slate-400 hover:text-rose-300 transition">Remove</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="luxury-card p-3 rounded-xl border border-white/5 flex flex-col gap-2">
-                        <p class="text-xs font-medium text-slate-200 leading-snug">"Sneaker manufacturing mein polyurethane vs rubber sole ka cost difference kya hai?"</p>
-                        <div class="flex gap-2">
-                            <button onclick="trigger3DOverlay(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-[11px] py-1 rounded-lg font-bold transition">Display 3D</button>
-                            <button onclick="removeQuestionItem(this)" class="luxury-card hover:bg-rose-500/20 text-[11px] px-2.5 py-1 rounded-lg text-slate-400 hover:text-rose-300 transition">Remove</button>
-                        </div>
+                </div>
+
+                <!-- AI Auto Thumbnail & Viral Clip Engine -->
+                <div class="glass-panel p-4 rounded-2xl flex flex-col gap-3 border border-white/10">
+                    <div class="flex items-center gap-2 pb-2 border-b border-white/5">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-purple-400"></i>
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">AI Post Suite</h3>
                     </div>
-                </div>
-            </div>
 
-            <!-- AI Clip & Auto-Thumbnail Generator -->
-            <div class="luxury-card p-4 rounded-2xl flex flex-col gap-3">
-                <div class="flex items-center gap-2 pb-2 border-b border-white/5">
-                    <i data-lucide="wand-2" class="w-4 h-4 text-purple-400"></i>
-                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">AI Post Studio</h3>
-                </div>
-
-                <p class="text-[11px] text-slate-400">Generate viral 3D clips & YouTube thumbnails directly from this recording session.</p>
-
-                <div class="flex gap-2">
-                    <button onclick="generateAutoThumbnail()" class="flex-1 luxury-card hover:border-purple-500/40 text-xs py-2.5 rounded-xl font-bold text-purple-300 transition flex items-center justify-center gap-1.5">
-                        <i data-lucide="image" class="w-3.5 h-3.5"></i> Auto Thumbnail
-                    </button>
-                    <button onclick="generateViralClips()" class="flex-1 luxury-card hover:border-pink-500/40 text-xs py-2.5 rounded-xl font-bold text-pink-300 transition flex items-center justify-center gap-1.5">
-                        <i data-lucide="film" class="w-3.5 h-3.5"></i> Cut Clips
-                    </button>
-                </div>
-
-                <div id="aiStudioOutput" class="hidden p-3 rounded-xl bg-black/40 border border-white/5 text-[11px] text-slate-300">
-                    <!-- Dynamic preview rendered here -->
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <!-- AUTHENTICATION MODAL -->
-    <div id="authModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
-        <div class="luxury-card bg-[#0b0e14] border border-white/10 p-6 md:p-8 rounded-3xl max-w-sm w-full text-center relative shadow-2xl">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">&times;</button>
-            <div class="w-12 h-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center mx-auto mb-4">
-                <i data-lucide="shield" class="w-6 h-6"></i>
-            </div>
-            <h3 class="text-xl font-black text-white mb-1">DAKICKS Cloud</h3>
-            <p class="text-xs text-slate-400 mb-6">Sign in to save unique UID & cloud recordings</p>
-
-            <div class="space-y-3">
-                <button onclick="loginUser('Google')" class="w-full bg-white hover:bg-slate-100 text-slate-900 font-bold py-3 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2">
-                    <i data-lucide="globe" class="w-4 h-4"></i> Continue with Google
-                </button>
-                <button onclick="loginUser('Microsoft')" class="w-full luxury-card hover:bg-white/5 text-white font-bold py-3 px-4 rounded-xl text-xs border border-white/10 transition flex items-center justify-center gap-2">
-                    <i data-lucide="layout" class="w-4 h-4"></i> Continue with Microsoft
-                </button>
-                <button onclick="loginUser('Apple')"  class="w-full bg-black hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-xl text-xs border border-white/10 transition flex items-center justify-center gap-2">
-                    <i data-lucide="smartphone" class="w-4 h-4"></i> Continue with Apple
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Hidden Thumbnail Canvas -->
-    <canvas id="thumbCanvas" width="1280" height="720" class="hidden"></canvas>
-
-    <!-- FOOTER -->
-    <footer class="border-t border-white/5 py-4 px-6 text-center text-xs text-slate-600">
-        DAKICKS Studio OS &bull; 4K Lossless Browser Engine &bull; White-label SaaS
-    </footer>
-
-    <!-- LOGIC SCRIPT -->
-    <script>
-        lucide.createIcons();
-
-        let localMediaStream = null;
-        let mediaRecorderInstance = null;
-        let recordingChunks = [];
-        let isRecordingSession = false;
-        let audioContext = null;
-        let analyser = null;
-        let animFrameId = null;
-        let timerInterval = null;
-        let secondsElapsed = 0;
-
-        // AUTH
-        function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }
-        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
-        function loginUser(provider) {
-            const uid = "DK-" + Math.floor(100000 + Math.random() * 900000);
-            document.getElementById('authStatusText').innerText = uid;
-            closeAuthModal();
-            alert("Authenticated with " + provider + "! Your Studio UID is: " + uid);
-        }
-
-        // STUDIO NAVIGATION
-        async function startInstantStudio() {
-            document.getElementById('homeView').classList.add('hidden');
-            document.getElementById('studioView').classList.remove('hidden');
-            try {
-                localMediaStream = await navigator.mediaDevices.getUserMedia({
-                    video: { width: { ideal: 3840 }, height: { ideal: 2160 } },
-                    audio: { echoCancellation: true, noiseSuppression: true }
-                });
-                document.getElementById('hostVideo').srcObject = localMediaStream;
-                initAudioVisualizer(localMediaStream);
-            } catch (e) {
-                alert("Camera and Microphone permissions required for live 4K Studio.");
-            }
-        }
-
-        function exitStudioMode() {
-            if (isRecordingSession) toggleStudioRecord();
-            if (localMediaStream) {
-                localMediaStream.getTracks().forEach(t => t.stop());
-            }
-            if (animFrameId) cancelAnimationFrame(animFrameId);
-            clearInterval(timerInterval);
-            document.getElementById('studioView').classList.add('hidden');
-            document.getElementById('homeView').classList.remove('hidden');
-        }
-
-        // AUDIO VISUALIZER
-        function initAudioVisualizer(stream) {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const source = audioContext.createMediaStreamSource(stream);
-            analyser = audioContext.createAnalyser();
-            analyser.fftSize = 64;
-            source.connect(analyser);
-
-            const canvas = document.getElementById('audioVisualizer');
-            const ctx = canvas.getContext('2d');
-            const bufferLength = analyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
-
-            function renderBars() {
-                animFrameId = requestAnimationFrame(renderBars);
-                analyser.getByteFrequencyData(dataArray);
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                const barWidth = (canvas.width / bufferLength) * 2;
-                let x = 0;
-                for (let i = 0; i < bufferLength; i++) {
-                    const barHeight = (dataArray[i] / 255) * canvas.height;
-                    ctx.fillStyle = 'rgba(129, 140, 248, 0.7)';
-                    ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-                    x += barWidth + 2;
-                }
-            }
-            renderBars();
-        }
-
-        // CONTROLS
-        function toggleAudio() {
-            if (localMediaStream) {
-                const track = localMediaStream.getAudioTracks()[0];
-                track.enabled = !track.enabled;
-                const btn = document.getElementById('micBtn');
-                btn.innerHTML = track.enabled 
-                    ? '<i data-lucide="mic" class="w-4 h-4 text-emerald-400"></i> <span>Mute</span>' 
-                    : '<i data-lucide="mic-off" class="w-4 h-4 text-rose-400"></i> <span>Unmuted</span>';
-                lucide.createIcons();
-            }
-        }
-
-        function toggleVideo() {
-            if (localMediaStream) {
-                const track = localMediaStream.getVideoTracks()[0];
-                track.enabled = !track.enabled;
-                const btn = document.getElementById('camBtn');
-                btn.innerHTML = track.enabled 
-                    ? '<i data-lucide="camera" class="w-4 h-4 text-emerald-400"></i> <span>Stop Cam</span>' 
-                    : '<i data-lucide="camera-off" class="w-4 h-4 text-rose-400"></i> <span>Start Cam</span>';
-                lucide.createIcons();
-            }
-        }
-
-        function toggleAiNoiseGate() {
-            const btn = document.getElementById('noiseGateBtn');
-            if (btn.innerText.includes('ON')) {
-                btn.innerHTML = '<i data-lucide="shield-alert" class="w-4 h-4"></i> AI Noise: OFF';
-                btn.classList.replace('text-emerald-400', 'text-amber-400');
-            } else {
-                btn.innerHTML = '<i data-lucide="shield-check" class="w-4 h-4"></i> AI Noise: ON';
-                btn.classList.replace('text-amber-400', 'text-emerald-400');
-            }
-            lucide.createIcons();
-        }
-
-        // 4K LOSSLESS RECORDING
-        function toggleStudioRecord() {
-            const btn = document.getElementById('recMasterBtn');
-            const indicator = document.getElementById('studioRecIndicator');
-
-            if (!isRecordingSession) {
-                recordingChunks = [];
-                try {
-                    mediaRecorderInstance = new MediaRecorder(localMediaStream, {
-                        mimeType: 'video/webm; codecs=vp9'
-                    });
-                } catch (e) {
-                    mediaRecorderInstance = new MediaRecorder(localMediaStream);
-                }
-
-                mediaRecorderInstance.ondataavailable = e => { if (e.data.size > 0) recordingChunks.push(e.data); };
-                mediaRecorderInstance.onstop = exportAndDownloadMaster;
-                mediaRecorderInstance.start(1000);
-
-                isRecordingSession = true;
-                btn.innerHTML = '<i data-lucide="square" class="w-4 h-4 text-white"></i> <span>Stop & Save 4K Master</span>';
-                btn.className = "bg-rose-600 hover:bg-rose-500 text-white font-black text-xs px-6 py-3 rounded-xl shadow-lg shadow-rose-600/30 transition flex items-center gap-2";
-                indicator.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span> 4K ON AIR';
-                indicator.classList.replace('text-slate-400', 'text-rose-400');
-
-                secondsElapsed = 0;
-                timerInterval = setInterval(() => {
-                    secondsElapsed++;
-                    const h = String(Math.floor(secondsElapsed / 3600)).padStart(2, '0');
-                    const m = String(Math.floor((secondsElapsed % 3600) / 60)).padStart(2, '0');
-                    const s = String(secondsElapsed % 60).padStart(2, '0');
-                    document.getElementById('recTimer').innerText = `${h}:${m}:${s}`;
-                }, 1000);
-            } else {
-                mediaRecorderInstance.stop();
-                isRecordingSession = false;
-                btn.innerHTML = '<i data-lucide="circle-dot" class="w-4 h-4 text-white"></i> <span>Start 4K Recording</span>';
-                btn.className = "bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-90 text-white font-black text-xs px-6 py-3 rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center gap-2";
-                indicator.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> STANDBY';
-                indicator.classList.replace('text-rose-400', 'text-slate-400');
-                clearInterval(timerInterval);
-            }
-            lucide.createIcons();
-        }
-
-        function exportAndDownloadMaster() {
-            const blob = new Blob(recordingChunks, { type: 'video/webm' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `DAKICKS-STUDIO-4K-MASTER-${Date.now()}.webm`;
-            document.body.appendChild(a);
-            a.click();
-            alert("High-definition 4K podcast master file downloaded automatically!");
-        }
-
-        // GUEST INVITE SYSTEM
-        function generateGuestInvite() {
-            const roomId = "dk-room-" + Math.random().toString(36).substring(2, 8);
-            const guestLink = window.location.href.split('?')[0] + "?room=" + roomId + "&role=guest";
-            document.getElementById('guestLinkInput').value = guestLink;
-            navigator.clipboard.writeText(guestLink);
-            alert("Guest invite link copied to clipboard!");
-
-            setTimeout(() => {
-                document.getElementById('guestEmptyState').classList.add('hidden');
-                document.getElementById('guestMockStream').classList.remove('hidden');
-                document.getElementById('guestMockStream').classList.add('flex');
-            }, 2500);
-        }
-
-        // 3D LIVE QUESTION OVERLAY
-        function trigger3DOverlay(btn) {
-            const question = btn.parentElement.previousElementSibling.innerText.replace(/"/g, '');
-            document.getElementById('overlayQuestionBody').innerText = question;
-            const overlay = document.getElementById('liveQuestionOverlay');
-            overlay.classList.remove('hidden');
-            lucide.createIcons();
-        }
-
-        function hideCurrentOverlay() {
-            document.getElementById('liveQuestionOverlay').classList.add('hidden');
-        }
-
-        function removeQuestionItem(btn) {
-            btn.closest('.luxury-card').remove();
-        }
-
-        function addCustomQuestion() {
-            const input = document.getElementById('manualQuestionInput');
-            const val = input.value.trim();
-            if (!val) return;
-            const container = document.getElementById('questionsContainer');
-            const newCard = document.createElement('div');
-            newCard.className = "luxury-card p-3 rounded-xl border border-white/5 flex flex-col gap-2";
-            newCard.innerHTML = `
-                <p class="text-xs font-medium text-slate-200 leading-snug">"${val}"</p>
-                <div class="flex gap-2">
-                    <button onclick="trigger3DOverlay(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-[11px] py-1 rounded-lg font-bold transition">Display 3D</button>
-                    <button onclick="removeQuestionItem(this)" class="luxury-card hover:bg-rose-500/20 text-[11px] px-2.5 py-1 rounded-lg text-slate-400 hover:text-rose-300 transition">Remove</button>
-                </div>
-            `;
-            container.prepend(newCard);
-            input.value = "";
-        }
-
-        // AI AUTO THUMBNAIL GENERATOR
-        function generateAutoThumbnail() {
-            const canvas = document.getElementById('thumbCanvas');
-            const ctx = canvas.getContext('2d');
-            const video = document.getElementById('hostVideo');
-
-            ctx.fillStyle = "#07090e";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            if (video && video.videoWidth > 0) {
-                ctx.drawImage(video, 0, 0, canvas.width / 2, canvas.height);
-            }
-
-            const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            grad.addColorStop(0, 'rgba(7, 9, 14, 0.2)');
-            grad.addColorStop(1, 'rgba(99, 102, 241, 0.8)');
-            ctx.fillStyle = grad;
-            ctx.fillRect(canvas.width / 2, 0, canvas.width / 2, canvas.height);
-
-            ctx.fillStyle = "#FFFFFF";
-            ctx.font = "bold 64px sans-serif";
-            ctx.fillText("DAKICKS 4K EXCLUSIVE", canvas.width / 2 + 40, 260);
-
-            ctx.fillStyle = "#F43F5E";
-            ctx.font = "bold 44px sans-serif";
-            ctx.fillText("THE UNTOLD SNEAKER STORY", canvas.width / 2 + 40, 340);
-
-            const thumbUrl = canvas.toDataURL('image/png');
-            const output = document.getElementById('aiStudioOutput');
-            output.classList.remove('hidden');
-            output.innerHTML = `
-                <div class="font-bold text-emerald-400 mb-2 flex items-center gap-1">
-                    <i data-lucide="check" class="w-3.5 h-3.5"></i> 4K Thumbnail Ready!
-                </div>
-                <img src="${thumbUrl}" class="rounded-lg w-full mb-2 border border-white/10">
-                <a href="${thumbUrl}" download="dakicks-youtube-thumb.png" class="inline-block w-full text-center bg-purple-600 hover:bg-purple-500 font-bold py-1.5 rounded-lg text-xs transition">Download Thumbnail</a>
-            `;
-            lucide.createIcons();
-        }
-
-        // AI VIRAL CLIPS CUTTER
-        function generateViralClips() {
-            const output = document.getElementById('aiStudioOutput');
-            output.classList.remove('hidden');
-            output.innerHTML = `
-                <div class="font-bold text-indigo-400 mb-1 flex items-center gap-1">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> AI Highlight Engine
-                </div>
-                <p class="text-[10px] text-slate-400 mb-2">Analyzing audio frequencies & peaks...</p>
-                <div class="space-y-1.5">
-                    <div class="p-2 rounded bg-white/5 flex justify-between items-center text-[10px]">
-                        <span>Clip 1: Sneaker Pricing Secrets (00:42)</span>
-                        <span class="text-emerald-400 font-mono">98% Viral Score</span>
+                    <div class="flex gap-2">
+                        <button onclick="renderAutoThumbnail()" class="flex-1 glass-panel hover:border-purple-500/40 text-[11px] py-2.5 rounded-xl font-bold text-purple-300 transition flex items-center justify-center gap-1.5">
+                            <i data-lucide="image" class="w-3.5 h-3.5"></i> YouTube Cover
+                        </button>
+                        <button onclick="simulateClipExtraction()" class="flex-1 glass-panel hover:border-pink-500/40 text-[11px] py-2.5 rounded-xl font-bold text-pink-300 transition flex items-center justify-center gap-1.5">
+                            <i data-lucide="scissors" class="w-3.5 h-3.5"></i> Auto Clips
+                        </button>
                     </div>
-                    <div class="p-2 rounded bg-white/5 flex justify-between items-center text-[10px]">
-                        <span>Clip 2: Sole Manufacturing Flaws (01:15)</span>
-                        <span class="text-emerald-400 font-mono">92% Viral Score</span>
-                    </div>
-                </div>
-            `;
-            lucide.createIcons();
-        }
-    </script>
-</body>
-</html>
 
+                
