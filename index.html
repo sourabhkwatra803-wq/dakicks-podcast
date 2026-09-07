@@ -268,4 +268,368 @@
             </div>
         </div>
     </main>
-    
+        <!-- SECTION 3: CREATOR EARNINGS & MONETIZATION DASHBOARD (YOUTUBE PARTNER PROGRAM STYLE) -->
+    <main id="tab-creator" class="tab-view hidden flex-1 p-4 md:p-8 max-w-6xl mx-auto w-full flex flex-col gap-6">
+        <div>
+            <h2 class="text-2xl font-black text-white">Creator Monetization & Ad Revenue</h2>
+            <p class="text-xs text-slate-400">Track stream CPM, viewer ad impressions, and request instant bank payouts</p>
+        </div>
+
+        <!-- Metric Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="luxury-glass p-5 rounded-2xl border border-white/10">
+                <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Estimated Balance</span>
+                <div class="text-3xl font-black text-emerald-400 mt-2" id="walletBalance">$1,420.50</div>
+                <span class="text-[10px] text-emerald-500/80 font-mono">+18.4% this week</span>
+            </div>
+            <div class="luxury-glass p-5 rounded-2xl border border-white/10">
+                <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Monetized Views</span>
+                <div class="text-3xl font-black text-indigo-400 mt-2" id="totalViewsDisplay">148,200</div>
+                <span class="text-[10px] text-indigo-400/80 font-mono">100% Verified streams</span>
+            </div>
+            <div class="luxury-glass p-5 rounded-2xl border border-white/10">
+                <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Average CPM</span>
+                <div class="text-3xl font-black text-purple-400 mt-2">$9.58</div>
+                <span class="text-[10px] text-purple-400/80 font-mono">Luxury footwear niche</span>
+            </div>
+            <div class="luxury-glass p-5 rounded-2xl border border-white/10 flex flex-col justify-between">
+                <div>
+                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Payout Gateway</span>
+                    <div class="text-xs font-bold text-slate-200 mt-2">Email / Bank Wire</div>
+                </div>
+                <button onclick="requestCreatorPayout()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 rounded-xl transition">
+                    Request Payout
+                </button>
+            </div>
+        </div>
+
+        <!-- Payout History -->
+        <div class="luxury-glass p-5 rounded-2xl border border-white/10">
+            <h3 class="text-sm font-bold text-slate-200 mb-3">Recent Monetization Distributions</h3>
+            <div class="space-y-2 text-xs">
+                <div class="p-3 rounded-xl bg-white/5 flex justify-between items-center">
+                    <div>
+                        <div class="font-bold text-slate-200">Ad Impressions Share (Episode #12)</div>
+                        <div class="text-[10px] text-slate-500 font-mono">Tx ID: #DK-98412 &bull; Direct Deposit</div>
+                    </div>
+                    <span class="font-mono text-emerald-400 font-bold">+$840.00 (Cleared)</span>
+                </div>
+                <div class="p-3 rounded-xl bg-white/5 flex justify-between items-center">
+                    <div>
+                        <div class="font-bold text-slate-200">Sponsor Direct Integration</div>
+                        <div class="text-[10px] text-slate-500 font-mono">Tx ID: #DK-77291 &bull; Wire Cleared</div>
+                    </div>
+                    <span class="font-mono text-emerald-400 font-bold">+$580.50 (Cleared)</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- SECTION 4: PUBLISH PODCAST (UPLOAD & MONETIZE) -->
+    <main id="tab-publish" class="tab-view hidden flex-1 p-4 md:p-8 max-w-3xl mx-auto w-full flex flex-col gap-6">
+        <div>
+            <h2 class="text-2xl font-black text-white">Publish New Podcast Episode</h2>
+            <p class="text-xs text-slate-400">Post your recorded video or audio to the global network feed with auto-monetization enabled</p>
+        </div>
+
+        <form id="publishShowForm" onsubmit="handlePublishShow(event)" class="luxury-glass p-6 md:p-8 rounded-3xl border border-white/10 flex flex-col gap-4">
+            <div>
+                <label class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Episode Title</label>
+                <input type="text" id="showTitle" required placeholder="e.g. Scaling Sneaker Resale with Automated Bots" class="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-indigo-500 mt-1">
+            </div>
+
+            <div>
+                <label class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Description & Key Timestamps</label>
+                <textarea id="showDesc" required rows="3" placeholder="Describe the podcast breakdown..." class="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-indigo-500 mt-1"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Video Source File (WebM/MP4)</label>
+                    <input type="file" id="showFile" accept="video/*,audio/*" class="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-400 mt-1 file:mr-3 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[10px] file:font-bold file:bg-indigo-600 file:text-white">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Estimated CPM Tier</label>
+                    <select id="showCpmTier" class="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2.5 text-xs text-slate-300 mt-1 outline-none focus:border-indigo-500">
+                        <option value="9.50">Premium Luxury Goods ($9.50 CPM)</option>
+                        <option value="6.20">Technology & SaaS ($6.20 CPM)</option>
+                        <option value="4.50">General Footwear & Lifestyle ($4.50 CPM)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-90 text-white font-bold py-3.5 rounded-xl text-xs transition mt-2 flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30">
+                <i data-lucide="upload" class="w-4 h-4"></i> Publish to Dakicks Network & Activate Monetization
+            </button>
+        </form>
+    </main>
+
+    <!-- AUTHENTICATION MODAL (EMAILJS CONNECTED) -->
+    <div id="authModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
+        <div class="luxury-glass bg-[#090b10] border border-white/10 p-6 md:p-8 rounded-3xl max-w-sm w-full text-center relative shadow-2xl">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">&times;</button>
+            <div class="w-12 h-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center mx-auto mb-3">
+                <i data-lucide="shield-check" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-xl font-black text-white mb-1">DAKICKS Cloud ID</h3>
+            <p class="text-xs text-slate-400 mb-5">Secure verified Creator authentication</p>
+
+            <form id="emailAuthForm" onsubmit="handleEmailJsRegistration(event)" class="space-y-3 text-left">
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Creator Name</label>
+                    <input type="text" id="authUserName" required placeholder="Sourabh Kwatra" class="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-indigo-500 mt-1">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Email Address</label>
+                    <input type="email" id="authUserEmail" required placeholder="dakicksofficialdkx@gmail.com" class="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-indigo-500 mt-1">
+                </div>
+                <button type="submit" id="authSubmitBtn" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-95 text-white font-bold py-2.5 rounded-xl text-xs transition mt-2 flex items-center justify-center gap-2">
+                    <i data-lucide="send" class="w-3.5 h-3.5"></i> Register Account & Generate UID
+                </button>
+            </form>
+            <div id="authFeedback" class="text-[11px] mt-3 hidden"></div>
+        </div>
+    </div>
+
+    <!-- Hidden Export Canvas for YouTube Cover -->
+    <canvas id="hiddenExportCanvas" width="1280" height="720" class="hidden"></canvas>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/5 py-4 px-6 text-center text-xs text-slate-600 mt-auto">
+        DAKICKS Pro Studio &bull; Next-Gen Decentralized Podcast & Creator Network &bull; 2026
+    </footer>
+
+    <!-- LOGIC JAVASCRIPT ENGINE -->
+    <script>
+        lucide.createIcons();
+
+        // EmailJS Configuration
+        const EMAILJS_PUBLIC_KEY = "UZVvtLHuf8uZWHdkg";
+        const EMAILJS_SERVICE_ID = "service_91l0edt";
+        const EMAILJS_TEMPLATE_ID = "template_6a78v2d";
+
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        // Hardware & State
+        let mediaStream = null;
+        let mediaRecorder = null;
+        let recordingBlobs = [];
+        let isRecording = false;
+        let audioCtx = null;
+        let analyserNode = null;
+        let visualizerFrame = null;
+        let timerTicker = null;
+        let elapsedSeconds = 0;
+
+        // Default Podcast Data (YouTube / Spotify Style)
+        let podcastFeedData = [
+            {
+                id: 1,
+                title: "How Dakicks Customizes 1-of-1 Handmade Sneakers",
+                creator: "Sourabh Kwatra",
+                views: 24200,
+                earnings: "$230.40",
+                duration: "24:10"
+            },
+            {
+                id: 2,
+                title: "Inside the Global Resale Underground Market",
+                creator: "Alex Rivera",
+                views: 89400,
+                earnings: "$854.20",
+                duration: "42:15"
+            },
+            {
+                id: 3,
+                title: "Why Traditional Molds Are Becoming Obsolete in 2026",
+                creator: "Elena Chen",
+                views: 34600,
+                earnings: "$328.00",
+                duration: "18:40"
+            }
+        ];
+
+        function renderPodcastFeed() {
+            const container = document.getElementById('podcastDirectory');
+            container.innerHTML = "";
+            podcastFeedData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "luxury-glass p-4 rounded-2xl border border-white/5 flex flex-col gap-3 hover:border-indigo-500/30 transition";
+                card.innerHTML = `
+                    <div class="w-full h-36 rounded-xl bg-slate-900 border border-white/5 flex items-center justify-center relative overflow-hidden">
+                        <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white">
+                            <i data-lucide="play" class="w-4 h-4 fill-white"></i>
+                        </div>
+                        <span class="absolute bottom-2 right-2 bg-black/80 px-2 py-0.5 rounded text-[10px] font-mono text-slate-300">${item.duration}</span>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-white line-clamp-2 leading-snug">${item.title}</h4>
+                        <p class="text-[10px] text-slate-400 mt-1">${item.creator} &bull; ${item.views.toLocaleString()} views</p>
+                    </div>
+                    <div class="flex items-center justify-between border-t border-white/5 pt-2.5 mt-auto">
+                        <span class="text-[10px] font-mono text-emerald-400 font-bold">Earned: ${item.earnings}</span>
+                        <button onclick="simulateWatch(${item.id})" class="text-[10px] bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded-lg font-bold transition">Stream</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function switchTab(tabKey) {
+            document.querySelectorAll('.tab-view').forEach(t => t.classList.add('hidden'));
+            const target = document.getElementById(`tab-${tabKey}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if (btn.dataset.tab === tabKey) {
+                    btn.classList.add('luxury-glass-active', 'text-white');
+                } else {
+                    btn.classList.remove('luxury-glass-active', 'text-white');
+                }
+            });
+
+            if (tabKey === 'studio' && !mediaStream) {
+                initializeStudioHardware();
+            }
+        }
+
+        // PUBLISH SHOW
+        function handlePublishShow(e) {
+            e.preventDefault();
+            const title = document.getElementById('showTitle').value;
+            const newShow = {
+                id: Date.now(),
+                title: title,
+                creator: localStorage.getItem('dakicks_user_name') || "Verified Creator",
+                views: 1,
+                earnings: "$0.10",
+                duration: "05:00"
+            };
+            podcastFeedData.unshift(newShow);
+            renderPodcastFeed();
+            alert("Episode published successfully to Dakicks Network with auto-monetization enabled!");
+            switchTab('feed');
+        }
+
+        function simulateWatch(id) {
+            const item = podcastFeedData.find(p => p.id === id);
+            if (item) {
+                item.views += 1;
+                renderPodcastFeed();
+                alert(`Now streaming: "${item.title}". Monetization impression recorded!`);
+            }
+        }
+
+        function requestCreatorPayout() {
+            const bal = document.getElementById('walletBalance').innerText;
+            alert(`Payout of ${bal} requested! Confirmation and wire details dispatched to registered admin.`);
+        }
+
+        // AUTH & EMAILJS
+        function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }
+        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
+
+        function handleEmailJsRegistration(e) {
+            e.preventDefault();
+            const name = document.getElementById('authUserName').value;
+            const email = document.getElementById('authUserEmail').value;
+            const submitBtn = document.getElementById('authSubmitBtn');
+            const feedback = document.getElementById('authFeedback');
+
+            const generatedUid = "DK-PRO-" + Math.floor(100000 + Math.random() * 900000);
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span>Connecting EmailJS...</span>`;
+
+            const templateParams = {
+                from_name: name,
+                user_email: email,
+                message: `New Creator Registered on Dakicks OS: ${name} (${email}) with UID ${generatedUid}`,
+                uid: generatedUid
+            };
+
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+                .then(function() {
+                    feedback.classList.remove('hidden', 'text-rose-400');
+                    feedback.classList.add('text-emerald-400');
+                    feedback.innerHTML = `UID Generated: <b>${generatedUid}</b>. Saved & emailed!`;
+                    document.getElementById('userStatusLabel').innerText = generatedUid;
+                    localStorage.setItem('dakicks_user_uid', generatedUid);
+                    localStorage.setItem('dakicks_user_name', name);
+                    setTimeout(closeAuthModal, 2000);
+                }, function() {
+                    feedback.classList.remove('hidden', 'text-emerald-400');
+                    feedback.classList.add('text-amber-400');
+                    feedback.innerHTML = `Saved locally! Assigned UID: <b>${generatedUid}</b>`;
+                    document.getElementById('userStatusLabel').innerText = generatedUid;
+                    setTimeout(closeAuthModal, 2000);
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = `<i data-lucide="send" class="w-3.5 h-3.5"></i> Register Account & Generate UID`;
+                    lucide.createIcons();
+                });
+        }
+
+        // STUDIO HARDWARE & 4K RECORDER
+        async function initializeStudioHardware() {
+            try {
+                mediaStream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: { ideal: 3840 }, height: { ideal: 2160 } },
+                    audio: { echoCancellation: true, noiseSuppression: true }
+                });
+                document.getElementById('hostLiveFeed').srcObject = mediaStream;
+                startVisualizer(mediaStream);
+            } catch (err) {
+                alert("Camera and Microphone permissions required for live 4K Studio.");
+            }
+        }
+
+        function startVisualizer(stream) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const src = audioCtx.createMediaStreamSource(stream);
+            analyserNode = audioCtx.createAnalyser();
+            analyserNode.fftSize = 64;
+            src.connect(analyserNode);
+
+            const canvas = document.getElementById('waveformCanvas');
+            const ctx = canvas.getContext('2d');
+            const bufferLen = analyserNode.frequencyBinCount;
+            const dataArr = new Uint8Array(bufferLen);
+
+            function draw() {
+                visualizerFrame = requestAnimationFrame(draw);
+                analyserNode.getByteFrequencyData(dataArr);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const barWidth = (canvas.width / bufferLen) * 2;
+                let x = 0;
+                for (let i = 0; i < bufferLen; i++) {
+                    const barHeight = (dataArr[i] / 255) * canvas.height;
+                    ctx.fillStyle = 'rgba(99, 102, 241, 0.7)';
+                    ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+                    x += barWidth + 2;
+                }
+            }
+            draw();
+        }
+
+        function toggleAudioDevice() {
+            if (mediaStream) {
+                const track = mediaStream.getAudioTracks()[0];
+                track.enabled = !track.enabled;
+                const btn = document.getElementById('audioToggleBtn');
+                btn.innerHTML = track.enabled 
+                    ? '<i data-lucide="mic" class="w-4 h-4 text-emerald-400"></i> <span>Mute Mic</span>'
+                    : '<i data-lucide="mic-off" class="w-4 h-4 text-rose-400"></i> <span>Unmuted</span>';
+                lucide.createIcons();
+            }
+        }
+
+        function toggleVideoDevice() {
+            if (mediaStream) {
+                const track = mediaStream.getVideoTracks()[0];
+                track.enabled = !track.enabled;
+                const btn = document.getElementById('videoToggleBtn');
+                btn.innerHTML = track.enabled 
+                    ? '<i data-lucide="camera" class="w-4 h-4 text-emerald-400"></i> <span>Stop Cam</span>'
+                    : '<i data-l
