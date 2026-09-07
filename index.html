@@ -294,4 +294,307 @@
                 <button onclick="loginUser('Microsoft')" class="w-full luxury-card hover:bg-white/5 text-white font-bold py-3 px-4 rounded-xl text-xs border border-white/10 transition flex items-center justify-center gap-2">
                     <i data-lucide="layout" class="w-4 h-4"></i> Continue with Microsoft
                 </button>
-                <button onclick="loginUser('Apple')" class="w-full bg-black hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-
+                <button onclick="loginUser('Apple')"  class="w-full bg-black hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-xl text-xs border border-white/10 transition flex items-center justify-center gap-2">
+                    <i data-lucide="smartphone" class="w-4 h-4"></i> Continue with Apple
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Thumbnail Canvas -->
+    <canvas id="thumbCanvas" width="1280" height="720" class="hidden"></canvas>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/5 py-4 px-6 text-center text-xs text-slate-600">
+        DAKICKS Studio OS &bull; 4K Lossless Browser Engine &bull; White-label SaaS
+    </footer>
+
+    <!-- LOGIC SCRIPT -->
+    <script>
+        lucide.createIcons();
+
+        let localMediaStream = null;
+        let mediaRecorderInstance = null;
+        let recordingChunks = [];
+        let isRecordingSession = false;
+        let audioContext = null;
+        let analyser = null;
+        let animFrameId = null;
+        let timerInterval = null;
+        let secondsElapsed = 0;
+
+        // AUTH
+        function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }
+        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
+        function loginUser(provider) {
+            const uid = "DK-" + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('authStatusText').innerText = uid;
+            closeAuthModal();
+            alert("Authenticated with " + provider + "! Your Studio UID is: " + uid);
+        }
+
+        // STUDIO NAVIGATION
+        async function startInstantStudio() {
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('studioView').classList.remove('hidden');
+            try {
+                localMediaStream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: { ideal: 3840 }, height: { ideal: 2160 } },
+                    audio: { echoCancellation: true, noiseSuppression: true }
+                });
+                document.getElementById('hostVideo').srcObject = localMediaStream;
+                initAudioVisualizer(localMediaStream);
+            } catch (e) {
+                alert("Camera and Microphone permissions required for live 4K Studio.");
+            }
+        }
+
+        function exitStudioMode() {
+            if (isRecordingSession) toggleStudioRecord();
+            if (localMediaStream) {
+                localMediaStream.getTracks().forEach(t => t.stop());
+            }
+            if (animFrameId) cancelAnimationFrame(animFrameId);
+            clearInterval(timerInterval);
+            document.getElementById('studioView').classList.add('hidden');
+            document.getElementById('homeView').classList.remove('hidden');
+        }
+
+        // AUDIO VISUALIZER
+        function initAudioVisualizer(stream) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const source = audioContext.createMediaStreamSource(stream);
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 64;
+            source.connect(analyser);
+
+            const canvas = document.getElementById('audioVisualizer');
+            const ctx = canvas.getContext('2d');
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+
+            function renderBars() {
+                animFrameId = requestAnimationFrame(renderBars);
+                analyser.getByteFrequencyData(dataArray);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const barWidth = (canvas.width / bufferLength) * 2;
+                let x = 0;
+                for (let i = 0; i < bufferLength; i++) {
+                    const barHeight = (dataArray[i] / 255) * canvas.height;
+                    ctx.fillStyle = 'rgba(129, 140, 248, 0.7)';
+                    ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+                    x += barWidth + 2;
+                }
+            }
+            renderBars();
+        }
+
+        // CONTROLS
+        function toggleAudio() {
+            if (localMediaStream) {
+                const track = localMediaStream.getAudioTracks()[0];
+                track.enabled = !track.enabled;
+                const btn = document.getElementById('micBtn');
+                btn.innerHTML = track.enabled 
+                    ? '<i data-lucide="mic" class="w-4 h-4 text-emerald-400"></i> <span>Mute</span>' 
+                    : '<i data-lucide="mic-off" class="w-4 h-4 text-rose-400"></i> <span>Unmuted</span>';
+                lucide.createIcons();
+            }
+        }
+
+        function toggleVideo() {
+            if (localMediaStream) {
+                const track = localMediaStream.getVideoTracks()[0];
+                track.enabled = !track.enabled;
+                const btn = document.getElementById('camBtn');
+                btn.innerHTML = track.enabled 
+                    ? '<i data-lucide="camera" class="w-4 h-4 text-emerald-400"></i> <span>Stop Cam</span>' 
+                    : '<i data-lucide="camera-off" class="w-4 h-4 text-rose-400"></i> <span>Start Cam</span>';
+                lucide.createIcons();
+            }
+        }
+
+        function toggleAiNoiseGate() {
+            const btn = document.getElementById('noiseGateBtn');
+            if (btn.innerText.includes('ON')) {
+                btn.innerHTML = '<i data-lucide="shield-alert" class="w-4 h-4"></i> AI Noise: OFF';
+                btn.classList.replace('text-emerald-400', 'text-amber-400');
+            } else {
+                btn.innerHTML = '<i data-lucide="shield-check" class="w-4 h-4"></i> AI Noise: ON';
+                btn.classList.replace('text-amber-400', 'text-emerald-400');
+            }
+            lucide.createIcons();
+        }
+
+        // 4K LOSSLESS RECORDING
+        function toggleStudioRecord() {
+            const btn = document.getElementById('recMasterBtn');
+            const indicator = document.getElementById('studioRecIndicator');
+
+            if (!isRecordingSession) {
+                recordingChunks = [];
+                try {
+                    mediaRecorderInstance = new MediaRecorder(localMediaStream, {
+                        mimeType: 'video/webm; codecs=vp9'
+                    });
+                } catch (e) {
+                    mediaRecorderInstance = new MediaRecorder(localMediaStream);
+                }
+
+                mediaRecorderInstance.ondataavailable = e => { if (e.data.size > 0) recordingChunks.push(e.data); };
+                mediaRecorderInstance.onstop = exportAndDownloadMaster;
+                mediaRecorderInstance.start(1000);
+
+                isRecordingSession = true;
+                btn.innerHTML = '<i data-lucide="square" class="w-4 h-4 text-white"></i> <span>Stop & Save 4K Master</span>';
+                btn.className = "bg-rose-600 hover:bg-rose-500 text-white font-black text-xs px-6 py-3 rounded-xl shadow-lg shadow-rose-600/30 transition flex items-center gap-2";
+                indicator.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span> 4K ON AIR';
+                indicator.classList.replace('text-slate-400', 'text-rose-400');
+
+                secondsElapsed = 0;
+                timerInterval = setInterval(() => {
+                    secondsElapsed++;
+                    const h = String(Math.floor(secondsElapsed / 3600)).padStart(2, '0');
+                    const m = String(Math.floor((secondsElapsed % 3600) / 60)).padStart(2, '0');
+                    const s = String(secondsElapsed % 60).padStart(2, '0');
+                    document.getElementById('recTimer').innerText = `${h}:${m}:${s}`;
+                }, 1000);
+            } else {
+                mediaRecorderInstance.stop();
+                isRecordingSession = false;
+                btn.innerHTML = '<i data-lucide="circle-dot" class="w-4 h-4 text-white"></i> <span>Start 4K Recording</span>';
+                btn.className = "bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-90 text-white font-black text-xs px-6 py-3 rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center gap-2";
+                indicator.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> STANDBY';
+                indicator.classList.replace('text-rose-400', 'text-slate-400');
+                clearInterval(timerInterval);
+            }
+            lucide.createIcons();
+        }
+
+        function exportAndDownloadMaster() {
+            const blob = new Blob(recordingChunks, { type: 'video/webm' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `DAKICKS-STUDIO-4K-MASTER-${Date.now()}.webm`;
+            document.body.appendChild(a);
+            a.click();
+            alert("High-definition 4K podcast master file downloaded automatically!");
+        }
+
+        // GUEST INVITE SYSTEM
+        function generateGuestInvite() {
+            const roomId = "dk-room-" + Math.random().toString(36).substring(2, 8);
+            const guestLink = window.location.href.split('?')[0] + "?room=" + roomId + "&role=guest";
+            document.getElementById('guestLinkInput').value = guestLink;
+            navigator.clipboard.writeText(guestLink);
+            alert("Guest invite link copied to clipboard!");
+
+            setTimeout(() => {
+                document.getElementById('guestEmptyState').classList.add('hidden');
+                document.getElementById('guestMockStream').classList.remove('hidden');
+                document.getElementById('guestMockStream').classList.add('flex');
+            }, 2500);
+        }
+
+        // 3D LIVE QUESTION OVERLAY
+        function trigger3DOverlay(btn) {
+            const question = btn.parentElement.previousElementSibling.innerText.replace(/"/g, '');
+            document.getElementById('overlayQuestionBody').innerText = question;
+            const overlay = document.getElementById('liveQuestionOverlay');
+            overlay.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function hideCurrentOverlay() {
+            document.getElementById('liveQuestionOverlay').classList.add('hidden');
+        }
+
+        function removeQuestionItem(btn) {
+            btn.closest('.luxury-card').remove();
+        }
+
+        function addCustomQuestion() {
+            const input = document.getElementById('manualQuestionInput');
+            const val = input.value.trim();
+            if (!val) return;
+            const container = document.getElementById('questionsContainer');
+            const newCard = document.createElement('div');
+            newCard.className = "luxury-card p-3 rounded-xl border border-white/5 flex flex-col gap-2";
+            newCard.innerHTML = `
+                <p class="text-xs font-medium text-slate-200 leading-snug">"${val}"</p>
+                <div class="flex gap-2">
+                    <button onclick="trigger3DOverlay(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-[11px] py-1 rounded-lg font-bold transition">Display 3D</button>
+                    <button onclick="removeQuestionItem(this)" class="luxury-card hover:bg-rose-500/20 text-[11px] px-2.5 py-1 rounded-lg text-slate-400 hover:text-rose-300 transition">Remove</button>
+                </div>
+            `;
+            container.prepend(newCard);
+            input.value = "";
+        }
+
+        // AI AUTO THUMBNAIL GENERATOR
+        function generateAutoThumbnail() {
+            const canvas = document.getElementById('thumbCanvas');
+            const ctx = canvas.getContext('2d');
+            const video = document.getElementById('hostVideo');
+
+            ctx.fillStyle = "#07090e";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (video && video.videoWidth > 0) {
+                ctx.drawImage(video, 0, 0, canvas.width / 2, canvas.height);
+            }
+
+            const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            grad.addColorStop(0, 'rgba(7, 9, 14, 0.2)');
+            grad.addColorStop(1, 'rgba(99, 102, 241, 0.8)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(canvas.width / 2, 0, canvas.width / 2, canvas.height);
+
+            ctx.fillStyle = "#FFFFFF";
+            ctx.font = "bold 64px sans-serif";
+            ctx.fillText("DAKICKS 4K EXCLUSIVE", canvas.width / 2 + 40, 260);
+
+            ctx.fillStyle = "#F43F5E";
+            ctx.font = "bold 44px sans-serif";
+            ctx.fillText("THE UNTOLD SNEAKER STORY", canvas.width / 2 + 40, 340);
+
+            const thumbUrl = canvas.toDataURL('image/png');
+            const output = document.getElementById('aiStudioOutput');
+            output.classList.remove('hidden');
+            output.innerHTML = `
+                <div class="font-bold text-emerald-400 mb-2 flex items-center gap-1">
+                    <i data-lucide="check" class="w-3.5 h-3.5"></i> 4K Thumbnail Ready!
+                </div>
+                <img src="${thumbUrl}" class="rounded-lg w-full mb-2 border border-white/10">
+                <a href="${thumbUrl}" download="dakicks-youtube-thumb.png" class="inline-block w-full text-center bg-purple-600 hover:bg-purple-500 font-bold py-1.5 rounded-lg text-xs transition">Download Thumbnail</a>
+            `;
+            lucide.createIcons();
+        }
+
+        // AI VIRAL CLIPS CUTTER
+        function generateViralClips() {
+            const output = document.getElementById('aiStudioOutput');
+            output.classList.remove('hidden');
+            output.innerHTML = `
+                <div class="font-bold text-indigo-400 mb-1 flex items-center gap-1">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> AI Highlight Engine
+                </div>
+                <p class="text-[10px] text-slate-400 mb-2">Analyzing audio frequencies & peaks...</p>
+                <div class="space-y-1.5">
+                    <div class="p-2 rounded bg-white/5 flex justify-between items-center text-[10px]">
+                        <span>Clip 1: Sneaker Pricing Secrets (00:42)</span>
+                        <span class="text-emerald-400 font-mono">98% Viral Score</span>
+                    </div>
+                    <div class="p-2 rounded bg-white/5 flex justify-between items-center text-[10px]">
+                        <span>Clip 2: Sole Manufacturing Flaws (01:15)</span>
+                        <span class="text-emerald-400 font-mono">92% Viral Score</span>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
+
