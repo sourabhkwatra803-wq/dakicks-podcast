@@ -632,4 +632,173 @@
                 const btn = document.getElementById('videoToggleBtn');
                 btn.innerHTML = track.enabled 
                     ? '<i data-lucide="camera" class="w-4 h-4 text-emerald-400"></i> <span>Stop Cam</span>'
-                    : '<i data-l
+                    : '<i data-lucide="camera-off" class="w-4 h-4 text-rose-400"></i> <span>Start Cam</span>';
+                lucide.createIcons();
+            }
+        }
+
+        function toggleNoiseSuppression() {
+            const btn = document.getElementById('noiseFilterBtn');
+            if (btn.innerText.includes('ON')) {
+                btn.innerHTML = '<i data-lucide="shield-alert" class="w-4 h-4"></i> AI Noise Gate: OFF';
+                btn.classList.replace('text-emerald-400', 'text-amber-400');
+            } else {
+                btn.innerHTML = '<i data-lucide="shield-check" class="w-4 h-4"></i> AI Noise Gate: ON';
+                btn.classList.replace('text-amber-400', 'text-emerald-400');
+            }
+            lucide.createIcons();
+        }
+
+        function toggleMasterRecording() {
+            const btn = document.getElementById('masterRecBtn');
+            const badge = document.getElementById('recordingBadge');
+
+            if (!isRecording) {
+                recordingBlobs = [];
+                try {
+                    mediaRecorder = new MediaRecorder(mediaStream, { mimeType: 'video/webm; codecs=vp9' });
+                } catch (e) {
+                    mediaRecorder = new MediaRecorder(mediaStream);
+                }
+
+                mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordingBlobs.push(e.data); };
+                mediaRecorder.onstop = saveAndDownloadRecording;
+                mediaRecorder.start(1000);
+
+                isRecording = true;
+                btn.innerHTML = '<i data-lucide="square" class="w-4 h-4 text-white"></i> <span>Stop 4K Recording</span>';
+                btn.className = "bg-rose-600 hover:bg-rose-500 text-white font-black text-xs px-6 py-3 rounded-xl shadow-lg shadow-rose-600/30 transition flex items-center gap-2";
+                badge.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span> 4K ON-AIR';
+                badge.classList.replace('text-slate-400', 'text-rose-400');
+
+                elapsedSeconds = 0;
+                timerTicker = setInterval(() => {
+                    elapsedSeconds++;
+                    const h = String(Math.floor(elapsedSeconds / 3600)).padStart(2, '0');
+                    const m = String(Math.floor((elapsedSeconds % 3600) / 60)).padStart(2, '0');
+                    const s = String(elapsedSeconds % 60).padStart(2, '0');
+                    document.getElementById('sessionTimer').innerText = `${h}:${m}:${s}`;
+                }, 1000);
+            } else {
+                mediaRecorder.stop();
+                isRecording = false;
+                btn.innerHTML = '<i data-lucide="disc" class="w-4 h-4"></i> <span>Start 4K Recording</span>';
+                btn.className = "bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-90 text-white font-black text-xs px-6 py-3 rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center gap-2";
+                badge.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> STANDBY';
+                badge.classList.replace('text-rose-400', 'text-slate-400');
+                clearInterval(timerTicker);
+            }
+            lucide.createIcons();
+        }
+
+        function saveAndDownloadRecording() {
+            const blob = new Blob(recordingBlobs, { type: 'video/webm' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `DAKICKS-MASTER-${Date.now()}.webm`;
+            document.body.appendChild(a);
+            a.click();
+            alert("Studio 4K Master saved and downloaded!");
+        }
+
+        function copyGuestInvite() {
+            const roomId = "dk-" + Math.random().toString(36).substring(2, 8);
+            const fullUrl = window.location.href.split('?')[0] + "?room=" + roomId + "&type=guest";
+            document.getElementById('guestUrlField').value = fullUrl;
+            navigator.clipboard.writeText(fullUrl);
+            alert("Guest invite URL copied!");
+
+            setTimeout(() => {
+                document.getElementById('guestIdleView').classList.add('hidden');
+                document.getElementById('guestLiveSimulation').classList.remove('hidden');
+                document.getElementById('guestLiveSimulation').classList.add('flex');
+            }, 2500);
+        }
+
+        function displayQuestionOnOverlay(btn) {
+            const text = btn.parentElement.previousElementSibling.innerText.replace(/"/g, '');
+            document.getElementById('screenQuestionText').innerText = text;
+            document.getElementById('screenQuestionOverlay').classList.remove('hidden');
+        }
+
+        function dismissScreenOverlay() {
+            document.getElementById('screenQuestionOverlay').classList.add('hidden');
+        }
+
+        function removeQuestionCard(btn) {
+            btn.closest('.luxury-glass').remove();
+            const count = document.getElementById('qaItemContainer').children.length;
+            document.getElementById('qaCounter').innerText = `${count} Queued`;
+        }
+
+        function addNewQuestion() {
+            const inp = document.getElementById('newQuestionInput');
+            const val = inp.value.trim();
+            if (!val) return;
+
+            const box = document.createElement('div');
+            box.className = "luxury-glass p-2.5 rounded-xl border border-white/5 flex flex-col gap-2";
+            box.innerHTML = `
+                <p class="font-medium text-slate-200">"${val}"</p>
+                <div class="flex gap-2">
+                    <button onclick="displayQuestionOnOverlay(this)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-[10px] py-1 rounded-lg font-bold transition">Display 3D</button>
+                    <button onclick="removeQuestionCard(this)" class="luxury-glass hover:bg-rose-500/20 text-[10px] px-2 py-1 rounded-lg text-slate-400 hover:text-rose-300 transition">Remove</button>
+                </div>
+            `;
+            document.getElementById('qaItemContainer').prepend(box);
+            inp.value = "";
+            const count = document.getElementById('qaItemContainer').children.length;
+            document.getElementById('qaCounter').innerText = `${count} Queued`;
+        }
+
+        function renderAutoThumbnail() {
+            const canvas = document.getElementById('hiddenExportCanvas');
+            const ctx = canvas.getContext('2d');
+            const vid = document.getElementById('hostLiveFeed');
+
+            ctx.fillStyle = "#05070B";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (vid && vid.videoWidth > 0) {
+                ctx.drawImage(vid, 0, 0, canvas.width / 2, canvas.height);
+            }
+
+            const gradient = ctx.createLinearGradient(canvas.width / 2, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, 'rgba(5, 7, 11, 0.3)');
+            gradient.addColorStop(1, 'rgba(79, 70, 229, 0.9)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(canvas.width / 2, 0, canvas.width / 2, canvas.height);
+
+            ctx.fillStyle = "#FFFFFF";
+            ctx.font = "bold 60px sans-serif";
+            ctx.fillText("DAKICKS 4K EXCLUSIVE", canvas.width / 2 + 40, 280);
+
+            ctx.fillStyle = "#F43F5E";
+            ctx.font = "bold 38px sans-serif";
+            ctx.fillText("BEHIND THE SCENES LIVE", canvas.width / 2 + 40, 350);
+
+            const imageURI = canvas.toDataURL('image/png');
+            const out = document.getElementById('aiStudioResult');
+            out.classList.remove('hidden');
+            out.innerHTML = `
+                <div class="font-bold text-emerald-400 mb-1 flex items-center gap-1">
+                    <i data-lucide="check" class="w-3.5 h-3.5"></i> Cover Generated!
+                </div>
+                <img src="${imageURI}" class="rounded-lg w-full mb-2 border border-white/10">
+                <a href="${imageURI}" download="dakicks-youtube-thumb.png" class="block w-full text-center bg-purple-600 hover:bg-purple-500 font-bold py-1.5 rounded-lg text-xs transition text-white">Download Thumbnail</a>
+            `;
+            lucide.createIcons();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderPodcastFeed();
+            const storedUID = localStorage.getItem('dakicks_user_uid');
+            if (storedUID) {
+                document.getElementById('userStatusLabel').innerText = storedUID;
+            }
+        });
+    </script>
+</body>
+</html>
+
